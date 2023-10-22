@@ -13,7 +13,7 @@ fn get_changes(changes_file string) ![]string {
 	return changes
 }
 
-fn analyse_changes(changes []string, opts &Opts) !(int, int, string) {
+fn analyse_changes(changes []string, opts &Opts) !(int, int, string, string) {
 	d.log_str('analyse previous changes')
 	d.stop_ticking()
 	mut re_version := onig_compile(opts.version_re, onig.opt_none)!
@@ -31,9 +31,10 @@ fn analyse_changes(changes []string, opts &Opts) !(int, int, string) {
 				0
 			}
 			last_version := m.group_text_by_name(line, 'version') or { '' }
+			date := m.group_text_by_name(line, 'date') or { '' }
 			d.start_ticking()
-			d.log('> version "%s" found (heading %d)', last_version, heading)
-			return i, heading, last_version
+			d.log('> version "%s" (%s) found (heading %d)', last_version, date, heading)
+			return i, heading, last_version, date
 		} else {
 			if err !is NoMatch {
 				return err
@@ -43,7 +44,7 @@ fn analyse_changes(changes []string, opts &Opts) !(int, int, string) {
 
 	d.start_ticking()
 	d.log_str('> no version found')
-	return -1, 0, ''
+	return -1, 0, '', ''
 }
 
 fn get_last_changes(changes []string, opts &Opts) !(int, int, string) {

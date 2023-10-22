@@ -138,7 +138,7 @@ Date:   Sun Mar 5 01:29:50 2023 +0100
 For analysing:
 
 ```yml
-version_re = ^\s*(?<heading>#+)\s+(?:(?<version>\d+\.\d+\.\d+)|(?:\[(?<version>\d+\.\d+\.\d+)\])).+\([-\d]+\)\s*$
+version_re = ^\s*(?<heading>#+)\s+(?:(?<version>\d+\.\d+\.\d+)|(?:\[(?<version>\d+\.\d+\.\d+)\])).+\((?<date>[-\d]+)\)\s*$
 ```
 
 For generating:

@@ -65,7 +65,7 @@ struct Opts {
 	subject_re       string            [json: 'subject-re'] = r'^\s*(?<type>[^: ]+)\s*:\s*(?<description>.+)$'
 	body_re          string            [json: 'body-re']
 	footer_re        string            [json: 'footer-re']
-	version_re       string            [json: 'version-re'] = r'^\s*(?<heading>#+)\s+(?:(?<version>\d+\.\d+\.\d+)|(?:\[(?<version>\d+\.\d+\.\d+)\])).+\([-\d]+\)\s*$'
+	version_re       string            [json: 'version-re'] = r'^\s*(?<heading>#+)\s+(?:(?<version>\d+\.\d+\.\d+)|(?:\[(?<version>\d+\.\d+\.\d+)\])).+\((?<date>[-\d]+)\)\s*$'
 	prolog           string = '# Changes'
 	version_tpl      string            [json: 'version-tpl'] = '{heading} [{version}]({repo_url}/compare/{tag_prefix}{prev_version}...{tag_prefix}{version}) ({date})'
 	change_tpl       string            [json: 'change-tpl']  = '#{heading} {title}'
@@ -98,6 +98,7 @@ fn body(mut opts Opts, _args []string) ! {
 	mut changes := []string{}
 	mut last_change := -1
 	mut last_version := ''
+	mut last_date := ''
 	changes_file_found := if opts.log.len > 0 {
 		changes_file = opts.log
 		exists(opts.log)
@@ -156,7 +157,7 @@ fn body(mut opts Opts, _args []string) ! {
 	if changes_file_found {
 		changes = get_changes(changes_file)!
 		mut heading := 0
-		last_change, heading, last_version = analyse_changes(changes, opts)!
+		last_change, heading, last_version, last_date = analyse_changes(changes, opts)!
 		if heading > 0 && heading != opts.heading {
 			opts.heading = heading
 		}
@@ -165,7 +166,7 @@ fn body(mut opts Opts, _args []string) ! {
 	commit_log := get_commits(last_version, opts)!
 	mut commits, all_commit_count := parse_commits(commit_log, opts)!
 	if commits.len == 0 {
-		loc := get_location(last_version, opts)
+		loc := get_location(last_version, last_date, opts)
 		mut msg := if all_commit_count > 0 {
 			commit_pl := if all_commit_count > 1 {
 				's'
@@ -191,7 +192,7 @@ fn body(mut opts Opts, _args []string) ! {
 	} else {
 		ver, date := compute_next_version(commits, last_version, opts)!
 		if ver.len == 0 {
-			loc := get_location(last_version, opts)
+			loc := get_location(last_version, last_date, opts)
 			commit_pl := if commits.len > 1 {
 				's'
 			} else {
@@ -236,7 +237,7 @@ fn body(mut opts Opts, _args []string) ! {
 		append_changes(changes_file, changes, last_change, new_changes, opts)!
 	}
 	if !opts.quiet {
-		loc := get_location(last_version, opts)
+		loc := get_location(last_version, last_date, opts)
 		commit_pl := if commits.len > 1 {
 			's'
 		} else {
@@ -256,21 +257,21 @@ fn body(mut opts Opts, _args []string) ! {
 	}
 }
 
-fn get_location(last_version string, opts &Opts) string {
+fn get_location(last_version string, last_date string, opts &Opts) string {
 	from := if opts.from.len > 0 {
 		opts.from
 	} else if last_version.len > 0 {
-		'${opts.tag_prefix}${last_version}'
+		'${opts.tag_prefix}${last_version} (${last_date})'
 	} else {
 		'the beginning'
 	}
 	to := if opts.to.len > 0 {
-		'until ${opts.to}'
+		' until ${opts.to}'
 	} else {
 		''
 	}
 	at := if opts.path.len > 0 {
-		'at "${opts.path}"'
+		' at "${opts.path}"'
 	} else {
 		''
 	}

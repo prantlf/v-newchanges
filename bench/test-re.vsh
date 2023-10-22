@@ -2,7 +2,7 @@
 
 import prantlf.onig { onig_compile }
 
-mut pat := r'^\s*(?<heading>#+)\s+(?:(?<version>\d+\.\d+\.\d+)|(?:\[(?<version>\d+\.\d+\.\d+)\])).+\([-\d]+\)\s*$'
+mut pat := r'^\s*(?<heading>#+)\s+(?:(?<version>\d+\.\d+\.\d+)|(?:\[(?<version>\d+\.\d+\.\d+)\])).+\((?<date>[-\d]+)\)\s*$'
 mut re := onig_compile(pat, onig.opt_none)!
 
 mut line := '# [23.4.0](https://gitlab.otxlab.net/smartui/nucleus/compare/23.2.0...23.4.0) (2023-06-09)'
