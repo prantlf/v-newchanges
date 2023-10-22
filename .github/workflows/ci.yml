@@ -13,29 +13,29 @@ on:
 
 jobs:
 
-  # linux:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout Sources
-  #     uses: actions/checkout@v4
-  #   - name: Setup V
-  #     uses: prantlf/setup-v-action@v2
-  #   - name: Build and Test
-  #     run: make RELEASE=1
-  #   - name: Shelve output
-  #     uses: prantlf/shelve-output-action@v2
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Sources
+      uses: actions/checkout@v4
+    - name: Setup V
+      uses: prantlf/setup-v-action@v2
+    - name: Build and Test
+      run: make RELEASE=1
+    - name: Shelve output
+      uses: prantlf/shelve-output-action@v2
 
-  # macos:
-  #   runs-on: macos-latest
-  #   steps:
-  #   - name: Checkout Sources
-  #     uses: actions/checkout@v4
-  #   - name: Setup V
-  #     uses: prantlf/setup-v-action@v2
-  #   - name: Build and Test
-  #     run: make RELEASE=1
-  #   - name: Shelve output
-  #     uses: prantlf/shelve-output-action@v2
+  macos:
+    runs-on: macos-latest
+    steps:
+    - name: Checkout Sources
+      uses: actions/checkout@v4
+    - name: Setup V
+      uses: prantlf/setup-v-action@v2
+    - name: Build and Test
+      run: make RELEASE=1
+    - name: Shelve output
+      uses: prantlf/shelve-output-action@v2
 
   windows:
     runs-on: windows-latest
@@ -49,20 +49,20 @@ jobs:
     - name: Shelve output
       uses: prantlf/shelve-output-action@v2
 
-  # release:
-  #   if: github.ref_name == 'master'
-  #   needs:
-  #     - linux
-  #     - macos
-  #     - windows
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout sources
-  #     uses: actions/checkout@v4
-  #   - name: Unshelve output
-  #     uses: prantlf/unshelve-output-action@v3
-  #   - name: Archive artifacts
-  #     uses: actions/upload-artifact@v3
-  #     with:
-  #       name: binaries
-  #       path: '*.zip'
+  release:
+    if: github.ref_name == 'master'
+    needs:
+      - linux
+      - macos
+      - windows
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout sources
+      uses: actions/checkout@v4
+    - name: Unshelve output
+      uses: prantlf/unshelve-output-action@v3
+    - name: Archive artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: binaries
+        path: '*.zip'
