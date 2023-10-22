@@ -1,4 +1,5 @@
 import os { execute }
+import time
 import prantlf.strutil { first_line }
 
 // type Tags = map[string]string
@@ -33,8 +34,7 @@ fn get_repo_url(remote_url string) !string {
 	}
 }
 
-fn get_commits(version string, opts &Opts) !string {
-	mut cmd := 'git log --format="%H%n%as%n%D%n%B%n${opts.commit_sep}"'
+fn get_commits(version string, date string, opts &Opts) !string {
 	from := if opts.from.len > 0 {
 		opts.from
 	} else if version.len > 0 {
@@ -42,6 +42,18 @@ fn get_commits(version string, opts &Opts) !string {
 	} else {
 		''
 	}
+	mut cmd := ''
+	if opts.try_unshallow {
+		cmd = 'git cat-file -e ${from}'
+		if _ := execute_git(cmd) {
+		} else {
+			last := time.parse_format(date, 'YYYY-MM-DD')!
+			since := last.add_days(-1).ymmdd()
+			cmd = 'git pull --tags --ff-only --shallow-since=${since} origin HEAD'
+			execute_git(cmd)!
+		}
+	}
+	cmd = 'git log --format="%H%n%as%n%D%n%B%n${opts.commit_sep}"'
 	if from.len > 0 || opts.to.len > 0 {
 		cmd += ' ${from}..${opts.to}'
 	}

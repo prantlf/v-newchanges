@@ -41,6 +41,6 @@ fn test_get_repo_url_unrecognised_2() {
 }
 
 // fn test_get_commits() {
-// 	root := get_commits('', Opts{})!
+// 	root := get_commits('', '', Opts{})!
 // 	assert root == wd
 // }

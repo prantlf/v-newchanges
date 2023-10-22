@@ -21,6 +21,7 @@ Options:
 	-l|--logged-types <types> change types to include in the log
   -f|--from <hash>          start at a specific commit (default: last change)
   -t|--to <hash>            end at a specific commit (default: HEAD)
+  -u|--try-unshallow        try fetch missing commits and tags if not found
   -p|--path <path>          consider only specific path (default: git root)
   -r|--repo-url <url>       URL of the git repository (default: from git)
   -o|--override-version <v> set the new version to the specified value
@@ -51,6 +52,7 @@ struct Opts {
 	tag_prefix       string            [json: 'tag-prefix'] = 'v'
 	from             string
 	to               string
+	try_unshallow    bool              [json: 'try-unshallow']
 	path             string
 	repo_url         string            [json: 'repo-url']
 	override_version string            [json: 'override-version']
@@ -163,7 +165,7 @@ fn body(mut opts Opts, _args []string) ! {
 		}
 	}
 
-	commit_log := get_commits(last_version, opts)!
+	commit_log := get_commits(last_version, last_date, opts)!
 	mut commits, all_commit_count := parse_commits(commit_log, opts)!
 	if commits.len == 0 {
 		loc := get_location(last_version, last_date, opts)

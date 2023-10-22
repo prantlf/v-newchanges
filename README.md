@@ -14,7 +14,49 @@ Update `CHANGELOG.md` automatically from the commit messages:
     discovered 1 classified commit from 1 total since v0.2.1
     version 0.3.0 (2023-08-13) and 10 lines written to "./CHANGELOG.md"
 
-## Example
+## Usage
+
+Updates the changelog file using git log messages by default if no command is specified.
+
+    newchanges [options] [commands]
+
+### Commands
+
+    init                      generate a config file with defaults
+
+### Options
+
+    -c|--config <name>        file name or path of the config file
+    -l|--log <file>           file to read from and write to (default: to find)
+    -t|--tag-prefix <prefix>  expect git tags prefixed (default: "v")
+    -h|--heading <level>      level of the log entry headings (default: 2)
+    -l|--logged-types <types> change types to include in the log
+    -f|--from <hash>          start at a specific commit (default: last change)
+    -t|--to <hash>            end at a specific commit (default: HEAD)
+    -u|--try-unshallow        try fetch missing commits and tags if not found
+    -p|--path <path>          consider only specific path (default: git root)
+    -r|--repo-url <url>       URL of the git repository (default: from git)
+    -o|--override-version <v> set the new version to the specified value
+    -e|--write-changes <file> write the new changes to the specified file
+    -w|--write-version <file> write the version numnber to the specified file
+    -a|--assume-patch         assume a patch release for insignificant commits
+    -0|--bump-major-0         bump the major version also if it is 0
+    -d|--dry-run              print the new changes on the console only
+    -N|--no-failure           do not fail if the change log was not updated
+    -i|--print-last           print changes for the last version on the console
+    -q|--quiet                omit the summary note on the standard output
+    -v|--verbose              print the new changes on the console too
+    -V|--version              print the version of the executable and exits
+    -h|--help                 print the usage information and exits
+
+Default change types to include in the log: "feat", "fix", "perf". If the commit message includes the note "BREAKING CHANGE", it will be included in the log regardless of its type.
+
+###  Examples:
+
+    $ newchanges -f v0.1.0 -t v0.2.0
+    $ newchanges -d
+
+## Description
 
 Let us have a look at the following changelog excerpt:
 
