@@ -242,8 +242,8 @@ fn body(mut opts Opts, _args []string) ! {
 		} else {
 			''
 		}
-		println('${prefix}discovered ${commits.len} classified commit${commit_pl} from ${all_commit_count} total ${loc}
-version ${next_version} (${next_date}) and ${new_changes.len} lines ${suffix}')
+		println('${prefix}discovered ${commits.len} classified commit${commit_pl} from ${all_commit_count} total ${loc}')
+		println('version ${next_version} (${next_date}) and ${new_changes.len} lines ${suffix}')
 	}
 	if opts.write_changes.len > 0 {
 		if contents.len == 0 {
