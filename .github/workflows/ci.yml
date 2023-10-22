@@ -23,7 +23,7 @@ jobs:
     - name: Build and Test
       run: make RELEASE=1
     - name: Shelve output
-      uses: prantlf/shelve-output-action@v1
+      uses: prantlf/shelve-output-action@v2
 
   macos:
     runs-on: macos-latest
@@ -31,11 +31,11 @@ jobs:
     - name: Checkout Sources
       uses: actions/checkout@v4
     - name: Setup V
-      uses: prantlf/setup-v-action@v1
+      uses: prantlf/setup-v-action@v2
     - name: Build and Test
       run: make RELEASE=1
     - name: Shelve output
-      uses: prantlf/shelve-output-action@v1
+      uses: prantlf/shelve-output-action@v2
 
   # windows:
   #   runs-on: windows-latest
@@ -43,13 +43,14 @@ jobs:
   #   - name: Checkout Sources
   #     uses: actions/checkout@v4
   #   - name: Setup V
-  #     uses: prantlf/setup-v-action@v1
+  #     uses: prantlf/setup-v-action@v2
   #   - name: Build
   #     run: cmd /c make-exe.bat
   #   - name: Shelve output
-  #     uses: prantlf/shelve-output-action@v1
+  #     uses: prantlf/shelve-output-action@v2
 
   release:
+    if: github.ref_name == 'master'
     needs:
       - linux
       - macos
@@ -59,11 +60,11 @@ jobs:
     - name: Checkout sources
       uses: actions/checkout@v4
     - name: Unshelve output
-      uses: prantlf/unshelve-output-action@v1
+      uses: prantlf/unshelve-output-action@v2
       with:
         include-windows: false
     - name: Discard shelf
-      uses: prantlf/discard-shelf-action@v2
+      uses: prantlf/discard-shelf-action@v3
       with:
         include-windows: false
     - name: Archive artifacts
