@@ -233,7 +233,10 @@ fn body(mut opts Opts, _args []string) ! {
 			changes_file = join_path_single(changes_dir, 'CHANGELOG.md')
 		}
 		if !opts.quiet {
-			dchanges_file := rwd(changes_file)
+			mut dchanges_file := rwd(changes_file)
+			if dchanges_file.starts_with('./') || dchanges_file.starts_with('.\\') {
+				dchanges_file = dchanges_file[2..]
+			}
 			suffix = 'written to "${dchanges_file}"'
 		}
 		append_changes(changes_file, changes, last_change, new_changes, opts)!
