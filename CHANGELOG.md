@@ -1,5 +1,11 @@
 # Changes
 
+## [0.1.1](https://github.com/prantlf/v-newchanges/compare/v0.1.0...v0.1.1) (2023-10-23)
+
+### Bug Fixes
+
+* Do not start the written file log with ./ ([c4304f6](https://github.com/prantlf/v-newchanges/commit/c4304f687d84f7ed56d895b2dacf6950c8c0be69))
+
 ## [0.1.0](https://github.com/prantlf/v-newchanges/compare/v0.0.2...v0.1.0) (2023-10-22)
 
 ### Features
