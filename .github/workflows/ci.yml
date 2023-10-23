@@ -100,5 +100,6 @@ jobs:
     - name: Discard shelved output
       uses: prantlf/discard-shelf-action@v3
       with:
+        name: newchanges
         include-linux: false
         include-macos: false
