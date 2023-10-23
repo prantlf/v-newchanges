@@ -15,15 +15,25 @@ jobs:
 
   linux:
     runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.bump.outputs.bumped }}
+      changed-files: ${{ steps.bump.outputs.changed-files }}
     steps:
     - name: Checkout Sources
       uses: actions/checkout@v4
     - name: Setup V
       uses: prantlf/setup-v-action@v2
+    - name: Bump version
+      id: bump
+      uses: prantlf/bump-version-action@v1
+    - name: Shelve changes
+      uses: prantlf/shelve-changes-action@v1
     - name: Build and Test
       run: make RELEASE=1
     - name: Shelve output
       uses: prantlf/shelve-output-action@v2
+      with:
+        enable: ${{ steps.bump.outputs.bumped }}
 
   macos:
     runs-on: macos-latest
@@ -32,10 +42,15 @@ jobs:
       uses: actions/checkout@v4
     - name: Setup V
       uses: prantlf/setup-v-action@v2
+    - name: Bump version
+      id: bump
+      uses: prantlf/bump-version-action@v1
     - name: Build and Test
       run: make RELEASE=1
     - name: Shelve output
       uses: prantlf/shelve-output-action@v2
+      with:
+        enable: ${{ steps.bump.outputs.bumped }}
 
   windows:
     runs-on: windows-latest
@@ -44,13 +59,18 @@ jobs:
       uses: actions/checkout@v4
     - name: Setup V
       uses: prantlf/setup-v-action@v2
+    # - name: Bump version
+    #   id: bump
+    #   uses: prantlf/bump-version-action@v1
     - name: Build
       run: cmd /c make-exe.bat
     - name: Shelve output
       uses: prantlf/shelve-output-action@v2
+      # with:
+      #   enable: ${{ steps.bump.outputs.bumped }}
 
   release:
-    if: github.ref_name == 'master'
+    if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
     needs:
       - linux
       - macos
@@ -59,10 +79,29 @@ jobs:
     steps:
     - name: Checkout sources
       uses: actions/checkout@v4
+    - name: Unshelve changes
+      uses: prantlf/unshelve-changes-action@v1
+      with:
+        files: ${{ needs.linux.outputs.changed-files }}
+        discard-shelf: false
     - name: Unshelve output
       uses: prantlf/unshelve-output-action@v3
-    - name: Archive artifacts
-      uses: actions/upload-artifact@v3
       with:
-        name: binaries
-        path: '*.zip'
+        discard-shelf: false
+    - name: Publish release
+      uses: prantlf/finish-release-action@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  clear:
+    if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed != 'true' }}
+    needs:
+      - linux
+      - windows
+    runs-on: ubuntu-latest
+    steps:
+    - name: Discard shelved output
+      uses: prantlf/discard-shelf-action@v3
+      with:
+        include-linux: false
+        include-macos: false
