@@ -25,7 +25,9 @@ jobs:
       uses: prantlf/setup-v-action@v2
     - name: Bump version
       id: bump
-      uses: prantlf/bump-version-action@v1
+      uses: prantlf/bump-version-action@v2
+      with:
+        bump-files: src/newchanges.v
     - name: Shelve changes
       uses: prantlf/shelve-changes-action@v1
     - name: Build and Test
@@ -36,38 +38,46 @@ jobs:
         enable: ${{ steps.bump.outputs.bumped }}
 
   macos:
+    needs:
+      - linux
     runs-on: macos-latest
     steps:
     - name: Checkout Sources
       uses: actions/checkout@v4
     - name: Setup V
       uses: prantlf/setup-v-action@v2
-    - name: Bump version
-      id: bump
-      uses: prantlf/bump-version-action@v1
+    - name: Unshelve changes
+      if: ${{ needs.linux.outputs.changed == 'true' }}
+      uses: prantlf/unshelve-changes-action@v1
+      with:
+        files: ${{ needs.linux.outputs.changed-files }}
+        discard-shelf: false
     - name: Build and Test
       run: make RELEASE=1
     - name: Shelve output
+      if: ${{ needs.linux.outputs.changed == 'true' }}
       uses: prantlf/shelve-output-action@v2
-      with:
-        enable: ${{ steps.bump.outputs.bumped }}
 
   windows:
+    needs:
+      - linux
     runs-on: windows-latest
     steps:
     - name: Checkout Sources
       uses: actions/checkout@v4
     - name: Setup V
       uses: prantlf/setup-v-action@v2
-    # - name: Bump version
-    #   id: bump
-    #   uses: prantlf/bump-version-action@v1
+    - name: Unshelve changes
+      if: ${{ needs.linux.outputs.changed == 'true' }}
+      uses: prantlf/unshelve-changes-action@v1
+      with:
+        files: ${{ needs.linux.outputs.changed-files }}
+        discard-shelf: false
     - name: Build
       run: cmd /c make-exe.bat
     - name: Shelve output
+      if: ${{ needs.linux.outputs.changed == 'true' }}
       uses: prantlf/shelve-output-action@v2
-      # with:
-      #   enable: ${{ steps.bump.outputs.bumped }}
 
   release:
     if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
@@ -89,17 +99,3 @@ jobs:
       uses: prantlf/finish-release-action@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  clear:
-    if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed != 'true' }}
-    needs:
-      - linux
-      - windows
-    runs-on: ubuntu-latest
-    steps:
-    - name: Discard shelved output
-      uses: prantlf/discard-shelf-action@v3
-      with:
-        name: newchanges
-        include-linux: false
-        include-macos: false
