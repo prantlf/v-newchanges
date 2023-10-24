@@ -1,5 +1,11 @@
 # Changes
 
+## [0.1.2](https://github.com/prantlf/v-newchanges/compare/v0.1.1...v0.1.2) (2023-10-24)
+
+### Bug Fixes
+
+* Build with updated dependencies ([7be45cc](https://github.com/prantlf/v-newchanges/commit/7be45cc933d453c8ab472b8022f3f24d8172c8b7))
+
 ## [0.1.1](https://github.com/prantlf/v-newchanges/compare/v0.1.0...v0.1.1) (2023-10-23)
 
 ### Bug Fixes
