@@ -6,6 +6,8 @@ Creates or updates the changelog file from commit messages formatted according t
 
 About writing commit messages, see [A Note About Git Commit Messages], [How to Write a Git Commit Message] and [Git Commit Good Practice]. See also the tool [vp] for automating the whole package publishing.
 
+[Node.js] users can install this tool using [node-newchanges] too.
+
 ## Synopsis
 
 Update `CHANGELOG.md` automatically from the commit messages:
@@ -265,3 +267,5 @@ Licensed under the MIT license.
 [How to Write a Git Commit Message]: https://cbea.ms/git-commit/
 [Git Commit Good Practice]: https://wiki.openstack.org/wiki/GitCommitMessages
 [vp]: https://github.com/prantlf/vp
+[node-newchanges]: https://github.com/prantlf/node-newchanges
+[Node.js]: http://nodejs.org/
