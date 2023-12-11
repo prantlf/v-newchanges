@@ -1,5 +1,9 @@
+VFLAGS=
 ifeq (1,${RELEASE})
-	VFLAGS=-prod
+	VFLAGS:=$(VFLAGS) -prod
+endif
+ifeq (1,${ARM})
+	VFLAGS:=-cflags "-target arm64-apple-darwin" $(VFLAGS)
 endif
 
 all: check build test

@@ -49,37 +49,37 @@ struct Opts {
 	quiet            bool
 	verbose          bool
 	log              string
-	tag_prefix       string            [json: 'tag-prefix'] = 'v'
+	tag_prefix       string = 'v'            @[json: 'tag-prefix']
 	from             string
 	to               string
-	try_unshallow    bool              [json: 'try-unshallow']
+	try_unshallow    bool              @[json: 'try-unshallow']
 	path             string
-	repo_url         string            [json: 'repo-url']
-	override_version string            [json: 'override-version']
-	write_changes    string            [json: 'write-changes']
-	write_version    string            [json: 'write-version']
-	assume_patch     bool              [json: 'assume-patch']
-	bump_major_0     bool              [json: 'bump-major-0']
-	dry_run          bool              [json: 'dry-run']
-	failure          bool              [json: 'failure'] = true
-	print_last       bool              [json: 'print-last']
-	commit_sep       string            [json: 'commit-sep'] = '----------==========----------'
-	subject_re       string            [json: 'subject-re'] = r'^\s*(?<type>[^: ]+)\s*:\s*(?<description>.+)$'
-	body_re          string            [json: 'body-re']
-	footer_re        string            [json: 'footer-re']
-	version_re       string            [json: 'version-re'] = r'^\s*(?<heading>#+)\s+(?:(?<version>\d+\.\d+\.\d+)|(?:\[(?<version>\d+\.\d+\.\d+)\])).+\((?<date>[-\d]+)\)\s*$'
+	repo_url         string            @[json: 'repo-url']
+	override_version string            @[json: 'override-version']
+	write_changes    string            @[json: 'write-changes']
+	write_version    string            @[json: 'write-version']
+	assume_patch     bool              @[json: 'assume-patch']
+	bump_major_0     bool              @[json: 'bump-major-0']
+	dry_run          bool              @[json: 'dry-run']
+	failure          bool = true              @[json: 'failure']
+	print_last       bool              @[json: 'print-last']
+	commit_sep       string = '----------==========----------'            @[json: 'commit-sep']
+	subject_re       string = r'^\s*(?<type>[^: ]+)\s*:\s*(?<description>.+)$'            @[json: 'subject-re']
+	body_re          string            @[json: 'body-re']
+	footer_re        string            @[json: 'footer-re']
+	version_re       string = r'^\s*(?<heading>#+)\s+(?:(?<version>\d+\.\d+\.\d+)|(?:\[(?<version>\d+\.\d+\.\d+)\])).+\((?<date>[-\d]+)\)\s*$'            @[json: 'version-re']
 	prolog           string = '# Changes'
-	version_tpl      string            [json: 'version-tpl'] = '{heading} [{version}]({repo_url}/compare/{tag_prefix}{prev_version}...{tag_prefix}{version}) ({date})'
-	change_tpl       string            [json: 'change-tpl']  = '#{heading} {title}'
-	commit_tpl       string            [json: 'commit-tpl']  = '* {description} ([{short_hash}]({repo_url}/commit/{hash}))'
-	logged_types     []string          [json: 'logged-types'; split] = ['feat', 'fix', 'perf']
-	type_titles      map[string]string [json: 'type-titles'] = {
+	version_tpl      string = '{heading} [{version}]({repo_url}/compare/{tag_prefix}{prev_version}...{tag_prefix}{version}) ({date})'            @[json: 'version-tpl']
+	change_tpl       string  = '#{heading} {title}'            @[json: 'change-tpl']
+	commit_tpl       string  = '* {description} ([{short_hash}]({repo_url}/commit/{hash}))'            @[json: 'commit-tpl']
+	logged_types     []string = ['feat', 'fix', 'perf']          @[json: 'logged-types'; split]
+	type_titles      map[string]string = {
 		'feat':            'Features'
 		'fix':             'Bug Fixes'
 		'perf':            'Performance Improvements'
 		'chore':           'Chores'
 		'BREAKING_CHANGE': 'BREAKING CHANGES'
-	}
+	} @[json: 'type-titles']
 mut:
 	heading int = 2
 }

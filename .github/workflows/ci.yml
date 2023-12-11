@@ -57,6 +57,13 @@ jobs:
     - name: Shelve output
       if: ${{ needs.linux.outputs.changed == 'true' }}
       uses: prantlf/shelve-output-action@v2
+    - name: Build ARM
+      run: make build RELEASE=1 ARM=1
+    - name: Shelve output
+      if: ${{ needs.linux.outputs.changed == 'true' }}
+      uses: prantlf/shelve-output-action@v2
+      with:
+        arch: arm64
 
   windows:
     needs:
@@ -94,7 +101,7 @@ jobs:
       with:
         files: ${{ needs.linux.outputs.changed-files }}
     - name: Unshelve output
-      uses: prantlf/unshelve-output-action@v3
+      uses: prantlf/unshelve-output-action@v4
     - name: Publish release
       uses: prantlf/finish-release-action@v1
       env:
