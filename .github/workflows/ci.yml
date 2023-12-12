@@ -68,43 +68,68 @@ jobs:
   windows:
     needs:
       - linux
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout Sources
       uses: actions/checkout@v4
     - name: Setup V
       uses: prantlf/setup-v-action@v2
-      with:
-        install-dependencies: false
-    - name: Install Dependencies
-      run: |
-        md src\modules
-        md src\modules\prantlf
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-cargs src\modules\prantlf\cargs
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-cli src\modules\prantlf\cli
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-config src\modules\prantlf\config
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-debug src\modules\prantlf\debug
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-dotenv src\modules\prantlf\dotenv
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-ini src\modules\prantlf\ini
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-jany src\modules\prantlf\jany
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-json src\modules\prantlf\json
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-onig src\modules\prantlf\onig
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-path src\modules\prantlf\path
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-pcre src\modules\prantlf\pcre
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-strutil src\modules\prantlf\strutil
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-template src\modules\prantlf\template
-        git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-yaml src\modules\prantlf\yaml
     - name: Unshelve changes
       if: ${{ needs.linux.outputs.changed == 'true' }}
       uses: prantlf/unshelve-changes-action@v1
       with:
         files: ${{ needs.linux.outputs.changed-files }}
         discard-shelf: false
-    - name: Build
-      run: cmd /c make-exe.bat
+    - name: Install Cross-Compiler
+      run: sudo apt-get install gcc-mingw-w64-x86-64
+    - name: Build Windows
+      run: make build RELEASE=1 WINDOWS=1
     - name: Shelve output
       if: ${{ needs.linux.outputs.changed == 'true' }}
       uses: prantlf/shelve-output-action@v2
+      with:
+        os: windows
+
+  # windows:
+  #   needs:
+  #     - linux
+  #   runs-on: windows-latest
+  #   steps:
+  #   - name: Checkout Sources
+  #     uses: actions/checkout@v4
+  #   - name: Setup V
+  #     uses: prantlf/setup-v-action@v2
+  #     with:
+  #       install-dependencies: false
+  #   - name: Install Dependencies
+  #     run: |
+  #       md src\modules
+  #       md src\modules\prantlf
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-cargs src\modules\prantlf\cargs
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-cli src\modules\prantlf\cli
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-config src\modules\prantlf\config
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-debug src\modules\prantlf\debug
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-dotenv src\modules\prantlf\dotenv
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-ini src\modules\prantlf\ini
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-jany src\modules\prantlf\jany
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-json src\modules\prantlf\json
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-onig src\modules\prantlf\onig
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-path src\modules\prantlf\path
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-pcre src\modules\prantlf\pcre
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-strutil src\modules\prantlf\strutil
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-template src\modules\prantlf\template
+  #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-yaml src\modules\prantlf\yaml
+  #   - name: Unshelve changes
+  #     if: ${{ needs.linux.outputs.changed == 'true' }}
+  #     uses: prantlf/unshelve-changes-action@v1
+  #     with:
+  #       files: ${{ needs.linux.outputs.changed-files }}
+  #       discard-shelf: false
+  #   - name: Build
+  #     run: cmd /c make-exe.bat
+  #   - name: Shelve output
+  #     if: ${{ needs.linux.outputs.changed == 'true' }}
+  #     uses: prantlf/shelve-output-action@v2
 
   release:
     if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
