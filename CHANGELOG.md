@@ -1,5 +1,12 @@
 # Changes
 
+## [0.2.0](https://github.com/prantlf/v-newchanges/compare/v0.1.2...v0.2.0) (2023-12-12)
+
+### Features
+
+* Add build for arm64 ([15bd66e](https://github.com/prantlf/v-newchanges/commit/15bd66e8b49fef5ae086b175bc27f49ee89ab896))
+* Build for Windows by cross-compiling ([e44880f](https://github.com/prantlf/v-newchanges/commit/e44880f8ee4defe22e23651f8c542d828693b7f9))
+
 ## [0.1.2](https://github.com/prantlf/v-newchanges/compare/v0.1.1...v0.1.2) (2023-10-24)
 
 ### Bug Fixes

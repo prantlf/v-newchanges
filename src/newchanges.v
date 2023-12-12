@@ -4,7 +4,7 @@ import semver
 import prantlf.cli { Cli, run }
 import prantlf.debug { rwd }
 
-const version = '0.1.2'
+const version = '0.2.0'
 
 const usage = 'Updates the changelog file using git log messages.
 
