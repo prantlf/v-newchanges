@@ -1,5 +1,11 @@
 # Changes
 
+## [0.3.0](https://github.com/prantlf/v-newchanges/compare/v0.2.0...v0.3.0) (2023-12-14)
+
+### Features
+
+* Add the linux arm64 support ([0234f3f](https://github.com/prantlf/v-newchanges/commit/0234f3f3f54cf910dc9c9d3013929e4ce308d26c))
+
 ## [0.2.0](https://github.com/prantlf/v-newchanges/compare/v0.1.2...v0.2.0) (2023-12-12)
 
 ### Features
