@@ -36,6 +36,17 @@ jobs:
       uses: prantlf/shelve-output-action@v2
       with:
         enable: ${{ steps.bump.outputs.bumped }}
+    - name: Install ARM Cross-Compiler
+      run: |
+        sudo apt-get update
+        sudo apt-get install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
+    - name: Build ARM
+      run: make build RELEASE=1 LINUX_ARM=1
+    - name: Shelve output
+      uses: prantlf/shelve-output-action@v2
+      with:
+        enable: ${{ steps.bump.outputs.bumped }}
+        arch: arm64
 
   macos:
     needs:
@@ -58,7 +69,7 @@ jobs:
       if: ${{ needs.linux.outputs.changed == 'true' }}
       uses: prantlf/shelve-output-action@v2
     - name: Build ARM
-      run: make build RELEASE=1 ARM=1
+      run: make build RELEASE=1 MACOS_ARM=1
     - name: Shelve output
       if: ${{ needs.linux.outputs.changed == 'true' }}
       uses: prantlf/shelve-output-action@v2
@@ -146,7 +157,7 @@ jobs:
       with:
         files: ${{ needs.linux.outputs.changed-files }}
     - name: Unshelve output
-      uses: prantlf/unshelve-output-action@v4
+      uses: prantlf/unshelve-output-action@v5
     - name: Publish release
       uses: prantlf/finish-release-action@v1
       env:
