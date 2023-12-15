@@ -1,0 +1,159 @@
+.TH newchanges "1" "December 15, 2023" "" "newchanges manual"
+
+.SH NAME
+newchanges - manages changelog file with conventional commit messages
+
+.SH SYNOPSIS
+.B newchanges
+[-c|--config
+.I name
+] [-l|--log
+.I
+file
+] [-h|--heading
+.I
+level
+]
+.br
+[-t|--tag-prefix
+.I
+prefix
+] [-l|--logged-types
+.I
+types
+] [-f|--from
+.I
+hash
+]
+.br
+[-t|--to
+.I
+hash
+] [-u|--try-unshallow] [-p|--path
+.I
+path
+]
+.br
+[-r|--repo-url
+.I
+url
+] [-o|--override-version
+.I
+version
+]
+.br
+[-e|--write-changes
+.I
+file
+] [-w|--write-version
+.I
+file
+]
+.br
+[-a|--assume-patch] [-0|--bump-major-0] [-d|--dry-run]
+.br
+[-N|--no-failure] [-i|--print-last] [-q|--quiet] [-v|--verbose]
+.br
+[-V|--version] [-h|--help]
+[
+.I [command]
+]
+.RE
+
+.SH DESCRIPTION
+newchanges creates or updates the changelog file from commit messages formatted according to Conventional Commits.
+
+.SH COMMANDS
+.B
+.IP "init"
+generate a config file with defaults
+
+.SH OPTIONS
+.B
+.IP "-c|--config name"
+file name or path of the config file
+.B
+.IP "-l|--log file"
+file to read from and write to (default: to find)
+.B
+.IP "-t|--tag-prefix prefix"
+expect git tags prefixed (default: "v")
+.B
+.IP "-h|--heading level"
+level of the log entry headings (default: 2)
+.B
+.IP "-l|--logged-types types"
+change types to include in the log
+.B
+.IP "-f|--from hash"
+start at a specific commit (default: last change)
+.B
+.IP "-t|--to hash"
+end at a specific commit (default: HEAD)
+.B
+.IP "-u|--try-unshallow"
+try fetch missing commits and tags if not found
+.B
+.IP "-p|--path path"
+consider only specific path (default: git root)
+.B
+.IP "-r|--repo-url url"
+URL of the git repository (default: from git)
+.B
+.IP "-o|--override-version version"
+set the new version to the specified value
+.B
+.IP "-e|--write-changes file"
+write the new changes to the specified file
+.B
+.IP "-w|--write-version file"
+write the version numnber to the specified file
+.B
+.IP "-a|--assume-patch"
+assume a patch release for insignificant commits
+.B
+.IP "-0|--bump-major-0"
+bump the major version also if it is 0
+.B
+.IP "-d|--dry-run"
+print the new changes on the console only
+.B
+.IP "-N|--no-failure"
+do not fail if the change log was not updated
+.B
+.IP "-i|--print-last"
+print changes for the last version on the console
+.B
+.IP "-q|--quiet"
+omit the summary note on the standard output
+.B
+.IP "-v|--verbose"
+print the new changes on the console too
+.B
+.IP "-V|--version"
+print the version of the executable and exit
+.B
+.IP "-h|--help"
+print the usage information and exit
+
+.RE
+Default change types to include in the log: "feat", "fix", "perf". If
+the commit message includes the note "BREAKING CHANGE", it will be
+included in the log regardless of its type.
+
+.SH EXAMPLES
+.B
+.IP "newchanges -f v0.1.0 -t v0.2.0"
+Update the changelog with changes between two specific tags only.
+.B
+.IP "newchanges -d"
+Generate new changes without modifying the changelog.
+
+.SH BUGS
+newchanges's bug tracker is located at <https://github.com/prantlf/v-newchanges/issues>
+
+.SH DOCUMENTATION
+See the website for documentation <https://github.com/prantlf/v-newchanges#readme>
+
+.SH AUTHOR
+Currently maintained by Ferdinand Prantl <prantlf@gmail.com>
