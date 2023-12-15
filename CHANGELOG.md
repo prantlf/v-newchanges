@@ -1,5 +1,11 @@
 # Changes
 
+## [0.4.0](https://github.com/prantlf/v-newchanges/compare/v0.3.0...v0.4.0) (2023-12-15)
+
+### Features
+
+* Add the man file ([f0c8c32](https://github.com/prantlf/v-newchanges/commit/f0c8c32c871b9a46a1d68c3c8078a4abca9135f1))
+
 ## [0.3.0](https://github.com/prantlf/v-newchanges/compare/v0.2.0...v0.3.0) (2023-12-14)
 
 ### Features
