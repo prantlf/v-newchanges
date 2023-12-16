@@ -3,6 +3,7 @@ import os { exists, join_path_single, write_file }
 import semver
 import prantlf.cli { Cli, run }
 import prantlf.debug { rwd }
+import prantlf.osutil { exist_in }
 
 const version = '0.4.0'
 
@@ -107,7 +108,7 @@ fn body(mut opts Opts, _args []string) ! {
 	} else {
 		changes_dir = get_git_root()!
 		if changes_dir.len > 0 {
-			if changes_name := find_file(changes_dir, ['CHANGELOG.md', 'CHANGES.md']) {
+			if changes_name := exist_in(['CHANGELOG.md', 'CHANGES.md'], changes_dir) {
 				changes_file = join_path_single(changes_dir, changes_name)
 				true
 			} else {
