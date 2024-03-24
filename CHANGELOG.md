@@ -1,5 +1,11 @@
 # Changes
 
+## [0.5.0](https://github.com/prantlf/v-newchanges/compare/v0.4.0...v0.5.0) (2024-03-24)
+
+### Features
+
+* Support pre-releases ([c3989cd](https://github.com/prantlf/v-newchanges/commit/c3989cd6a9e6588fa817c1f8f912d8e0e4ad86d8))
+
 ## [0.4.0](https://github.com/prantlf/v-newchanges/compare/v0.3.0...v0.4.0) (2023-12-15)
 
 ### Features
