@@ -7,7 +7,8 @@ fn parse_commits(commit_log string, opts &Opts) !([]Commit, int) {
 	d.stop_ticking()
 	lines := commit_log.split_into_lines()
 
-	mut re_vertag := onig_compile('^${opts.tag_prefix}\\d+\\.\\d+\\.\\d+\$', onig.opt_none)!
+	mut re_vertag := onig_compile('^${opts.tag_prefix}\\d+\\.\\d+\\.\\d+(?:-[.0-9A-Za-z-]+)?\$',
+		onig.opt_none)!
 	defer {
 		re_vertag.free()
 	}

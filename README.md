@@ -43,6 +43,8 @@ Updates the changelog file using git log messages by default if no command is sp
     -w|--write-version <file> write the version numnber to the specified file
     -a|--assume-patch         assume a patch release for insignificant commits
     -0|--bump-major-0         bump the major version also if it is 0
+    --pre-release             bump the existing pre-release number
+    --pre-id <id>             first pre-release identifier (default: "next")
     -d|--dry-run              print the new changes on the console only
     -N|--no-failure           do not fail if the change log was not updated
     -i|--print-last           print changes for the last version on the console

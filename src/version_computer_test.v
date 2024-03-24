@@ -131,6 +131,105 @@ fn test_minor_2() {
 	assert next_date == now_date
 }
 
+fn test_first_pre_release() {
+	commits := [
+		Commit{
+			vars: {
+				'short_hash':  ['0000000']
+				'type':        ['feat']
+				'description': ['minor']
+			}
+		},
+	]
+	next_version, next_date := compute_next_version(commits, '1.0.0', Opts{
+		pre_release: true
+	})!
+	assert next_version == '1.0.1-next.0'
+	assert next_date == now_date
+}
+
+fn test_first_pre_release_2() {
+	commits := [
+		Commit{
+			vars: {
+				'short_hash':  ['0000000']
+				'type':        ['feat']
+				'description': ['minor']
+			}
+		},
+	]
+	next_version, next_date := compute_next_version(commits, '1.0.0', Opts{
+		pre_release: true
+		pre_id: 'beta'
+	})!
+	assert next_version == '1.0.1-beta.0'
+	assert next_date == now_date
+}
+
+fn test_next_pre_release() {
+	commits := [
+		Commit{
+			vars: {
+				'short_hash':  ['0000000']
+				'type':        ['feat']
+				'description': ['minor']
+			}
+		},
+	]
+	next_version, next_date := compute_next_version(commits, '1.0.1-alpha', Opts{
+		pre_release: true
+	})!
+	assert next_version == '1.0.1-alpha.1'
+	assert next_date == now_date
+}
+
+fn test_next_pre_release_2() {
+	commits := [
+		Commit{
+			vars: {
+				'short_hash':  ['0000000']
+				'type':        ['feat']
+				'description': ['minor']
+			}
+		},
+	]
+	next_version, next_date := compute_next_version(commits, '1.0.1-alpha.1', Opts{
+		pre_release: true
+	})!
+	assert next_version == '1.0.1-alpha.2'
+	assert next_date == now_date
+}
+
+fn test_after_pre_release() {
+	commits := [
+		Commit{
+			vars: {
+				'short_hash':  ['0000000']
+				'type':        ['fix']
+				'description': ['patch']
+			}
+		},
+	]
+	next_version, next_date := compute_next_version(commits, '1.0.1-alpha', Opts{})!
+	assert next_version == '1.0.1'
+	assert next_date == now_date
+}
+
+fn test_after_pre_release_2() {
+	commits := [
+		Commit{
+			vars: {
+				'short_hash':  ['0000000']
+				'type':        ['feat']
+				'description': ['minor']
+			}
+		},
+	]
+	next_version, next_date := compute_next_version(commits, '1.0.1-alpha', Opts{})!
+	assert next_version == '1.1.0'
+	assert next_date == now_date
+}
+
 fn test_from_commit() {
 	commits := [
 		Commit{

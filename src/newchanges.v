@@ -30,6 +30,8 @@ Options:
   -w|--write-version <file> write the version numnber to the specified file
   -a|--assume-patch         assume a patch release for insignificant commits
   -0|--bump-major-0         bump the major version also if it is 0
+  --pre-release             bump the existing pre-release number
+  --pre-id <id>             first pre-release identifier (default: "next")
   -d|--dry-run              print the new changes on the console only
   -N|--no-failure           do not fail if the change log was not updated
   -i|--print-last           print changes for the last version on the console
@@ -61,6 +63,8 @@ struct Opts {
 	write_version    string            @[json: 'write-version']
 	assume_patch     bool              @[json: 'assume-patch']
 	bump_major_0     bool              @[json: 'bump-major-0']
+	pre_release      bool              @[json: 'pre-release']
+	pre_id           string = 'next'            @[json: 'pre-id']
 	dry_run          bool              @[json: 'dry-run']
 	failure          bool = true              @[json: 'failure']
 	print_last       bool              @[json: 'print-last']
@@ -68,7 +72,7 @@ struct Opts {
 	subject_re       string = r'^\s*(?<type>[^: ]+)\s*:\s*(?<description>.+)$'            @[json: 'subject-re']
 	body_re          string            @[json: 'body-re']
 	footer_re        string            @[json: 'footer-re']
-	version_re       string = r'^\s*(?<heading>#+)\s+(?:(?<version>\d+\.\d+\.\d+)|(?:\[(?<version>\d+\.\d+\.\d+)\])).+\((?<date>[-\d]+)\)\s*$'            @[json: 'version-re']
+	version_re       string = r'^\s*(?<heading>#+)\s+(?:(?<version>\d+\.\d+\.\d+(?:-[.0-9A-Za-z-]+)?)|(?:\[(?<version>\d+\.\d+\.\d+(?:-[.0-9A-Za-z-]+)?)\])).+\((?<date>[-\d]+)\)\s*$'            @[json: 'version-re']
 	prolog           string = '# Changes'
 	version_tpl      string = '{heading} [{version}]({repo_url}/compare/{tag_prefix}{prev_version}...{tag_prefix}{version}) ({date})'            @[json: 'version-tpl']
 	change_tpl       string  = '#{heading} {title}'            @[json: 'change-tpl']

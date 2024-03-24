@@ -1,5 +1,7 @@
 import semver { Increment }
+import strconv { atoi }
 import time { now }
+import prantlf.onig { NoMatch, onig_compile }
 
 fn compute_next_version(commits []Commit, last_version string, opts &Opts) !(string, string) {
 	d.log_str('compute the next version number')
@@ -89,7 +91,45 @@ fn compute_next_version(commits []Commit, last_version string, opts &Opts) !(str
 		d.log_str('reduce the change severity to minor because of the major number 0')
 		increment = Increment.minor
 	}
-	next_version = ver_num.increment(increment).str()
+
+	if ver_num.prerelease.len > 0 {
+		if opts.pre_release {
+			mut re_vernum := onig_compile('\\.\\d+\$', onig.opt_none)!
+			defer {
+				re_vernum.free()
+			}
+			if m := re_vernum.search(ver_num.prerelease, onig.opt_none) {
+				d.log_str('bump the prerelease version')
+				dot := m.groups[0].start
+				pre_num := atoi(ver_num.prerelease[dot + 1..])!
+				clean_ver := semver.build(ver_num.major, ver_num.minor, ver_num.patch)
+				next_version = '${clean_ver}-${ver_num.prerelease[0..dot]}.${pre_num + 1}'
+			} else {
+				if err !is NoMatch {
+					return err
+				}
+				d.log_str('add the prerelease version')
+				next_version = '${next_version}.1'
+			}
+		} else {
+			clean_ver := semver.build(ver_num.major, ver_num.minor, ver_num.patch)
+			next_version = if increment == Increment.major || increment == Increment.minor {
+				d.log_str('remove prerelease and bump the version')
+				clean_ver.increment(increment).str()
+			} else {
+				d.log_str('remove prerelease and keep the patch version')
+				clean_ver.str()
+			}
+		}
+	} else {
+		next_version = if opts.pre_release {
+			d.log_str('introduce prerelease of the next patch version')
+			'${ver_num.increment(Increment.patch)}-${opts.pre_id}.0'
+		} else {
+			ver_num.increment(increment).str()
+		}
+	}
+
 	d.start_ticking()
 	d.log('the next version will be "%s"', next_version)
 	next_date := now().ymmdd()
