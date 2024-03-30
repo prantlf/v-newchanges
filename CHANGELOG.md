@@ -1,5 +1,11 @@
 # Changes
 
+## [0.5.1](https://github.com/prantlf/v-newchanges/compare/v0.5.0...v0.5.1) (2024-03-30)
+
+### Bug Fixes
+
+* Compute pre-releases with prantlf.semvut ([2a91167](https://github.com/prantlf/v-newchanges/commit/2a9116789f936fa0f36277696c3c9e86e6fc2d1a))
+
 ## [0.5.0](https://github.com/prantlf/v-newchanges/compare/v0.4.0...v0.5.0) (2024-03-24)
 
 ### Features
