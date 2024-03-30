@@ -40,7 +40,7 @@ Updates the changelog file using git log messages by default if no command is sp
     -r|--repo-url <url>       URL of the git repository (default: from git)
     -o|--override-version <v> set the new version to the specified value
     -e|--write-changes <file> write the new changes to the specified file
-    -w|--write-version <file> write the version numnber to the specified file
+    -w|--write-version <file> write the version number to the specified file
     -a|--assume-patch         assume a patch release for insignificant commits
     -0|--bump-major-0         bump the major version also if it is 0
     --pre-release             bump the existing pre-release number

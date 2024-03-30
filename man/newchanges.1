@@ -50,9 +50,14 @@ file
 file
 ]
 .br
-[-a|--assume-patch] [-0|--bump-major-0] [-d|--dry-run]
+[-a|--assume-patch] [-0|--bump-major-0] [--pre-release]
 .br
-[-N|--no-failure] [-i|--print-last] [-q|--quiet] [-v|--verbose]
+[--pre-id
+/I
+id
+] [-d|--dry-run] [-N|--no-failure]
+.br
+[-i|--print-last] [-q|--quiet] [-v|--verbose]
 .br
 [-V|--version] [-h|--help]
 [
@@ -107,13 +112,19 @@ set the new version to the specified value
 write the new changes to the specified file
 .B
 .IP "-w|--write-version file"
-write the version numnber to the specified file
+write the version number to the specified file
 .B
 .IP "-a|--assume-patch"
 assume a patch release for insignificant commits
 .B
 .IP "-0|--bump-major-0"
 bump the major version also if it is 0
+.B
+.IP "pre-release"
+bump the existing pre-release number
+.B
+.IP "pre-id id"
+first pre-release identifier (default: "next")
 .B
 .IP "-d|--dry-run"
 print the new changes on the console only

@@ -22,5 +22,5 @@ build:
 	v $(VFLAGS) -o newchanges .
 
 test:
-	v -use-os-system-to-run test .
+	v test .
 	./test.sh
