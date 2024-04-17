@@ -1,5 +1,11 @@
 # Changes
 
+## [0.5.2](https://github.com/prantlf/v-newchanges/compare/v0.5.1...v0.5.2) (2024-04-17)
+
+### Bug Fixes
+
+* Upgrade dependencies ([fa08d9c](https://github.com/prantlf/v-newchanges/commit/fa08d9c3ec93a248550c11948909c9323869e325))
+
 ## [0.5.1](https://github.com/prantlf/v-newchanges/compare/v0.5.0...v0.5.1) (2024-03-30)
 
 ### Bug Fixes
