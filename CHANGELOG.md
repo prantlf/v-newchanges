@@ -1,5 +1,11 @@
 # Changes
 
+## [0.6.0](https://github.com/prantlf/v-newchanges/compare/v0.5.2...v0.6.0) (2024-04-26)
+
+### Features
+
+* Add displayable titles for change types refactor, docs, style, build ([5f5af3f](https://github.com/prantlf/v-newchanges/commit/5f5af3fd1e85fa7d872174ad46cbc115fabd2718))
+
 ## [0.5.2](https://github.com/prantlf/v-newchanges/compare/v0.5.1...v0.5.2) (2024-04-17)
 
 ### Bug Fixes
