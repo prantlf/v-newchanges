@@ -82,6 +82,10 @@ struct Opts {
 		'feat':            'Features'
 		'fix':             'Bug Fixes'
 		'perf':            'Performance Improvements'
+		'refactor':        'Refactoring'
+		'docs':            'Documentation'
+		'style':           'Source Code Styling'
+		'build':           'Build Configuration'
 		'chore':           'Chores'
 		'BREAKING_CHANGE': 'BREAKING CHANGES'
 	} @[json: 'type-titles']
