@@ -37,6 +37,23 @@ jobs:
       uses: prantlf/shelve-output-action@v2
       with:
         extra: man
+
+  linux-arm:
+    if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
+    needs:
+      - linux
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Sources
+      uses: actions/checkout@v4
+    - name: Setup V
+      uses: prantlf/setup-v-action@v2
+    - name: Unshelve changes
+      if: ${{ needs.linux.outputs.changed == 'true' }}
+      uses: prantlf/unshelve-changes-action@v1
+      with:
+        files: ${{ needs.linux.outputs.changed-files }}
+        discard-shelf: false
     - name: Install ARM Cross-Compiler
       run: |
         sudo apt-get update
@@ -44,7 +61,7 @@ jobs:
     - name: Build ARM
       run: make build RELEASE=1 LINUX_ARM=1
     - name: Shelve output
-      if: ${{ steps.bump.outputs.bumped == 'true' }}
+      if: ${{ needs.linux.outputs.changed == 'true' }}
       uses: prantlf/shelve-output-action@v2
       with:
         arch: arm64
@@ -81,7 +98,33 @@ jobs:
         arch: arm64
         extra: man
 
+  macos-arm:
+    if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
+    needs:
+      - linux
+    runs-on: macos-13
+    steps:
+    - name: Checkout Sources
+      uses: actions/checkout@v4
+    - name: Setup V
+      uses: prantlf/setup-v-action@v2
+    - name: Unshelve changes
+      if: ${{ needs.linux.outputs.changed == 'true' }}
+      uses: prantlf/unshelve-changes-action@v1
+      with:
+        files: ${{ needs.linux.outputs.changed-files }}
+        discard-shelf: false
+    - name: Build ARM
+      run: make build RELEASE=1 MACOS_ARM=1
+    - name: Shelve output
+      if: ${{ needs.linux.outputs.changed == 'true' }}
+      uses: prantlf/shelve-output-action@v2
+      with:
+        arch: arm64
+        extra: man
+
   windows:
+    if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
     needs:
       - linux
     runs-on: ubuntu-latest
@@ -151,7 +194,9 @@ jobs:
     if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
     needs:
       - linux
+      - linux-arm
       - macos
+      - macos-arm
       - windows
     runs-on: macos-13
     steps:
