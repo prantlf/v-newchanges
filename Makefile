@@ -8,6 +8,9 @@ endif
 ifeq (1,${LINUX_ARM})
 	VFLAGS:=-cc aarch64-linux-gnu-gcc $(VFLAGS)
 endif
+ifeq (1,${LINUX_RISCV})
+	VFLAGS:=-cc riscv64-linux-gnu-gcc $(VFLAGS)
+endif
 ifeq (1,${WINDOWS})
 	VFLAGS:=-os windows $(VFLAGS)
 endif

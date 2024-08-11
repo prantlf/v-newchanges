@@ -3,7 +3,7 @@ name: Build and Test or Release
 on:
   push:
     branches:
-      - master
+      - riscv
     tags-ignore:
       - '**'
     paths-ignore:
@@ -13,146 +13,138 @@ on:
 
 jobs:
 
-  linux:
-    runs-on: ubuntu-latest
-    outputs:
-      changed: ${{ steps.bump.outputs.bumped }}
-      changed-files: ${{ steps.bump.outputs.changed-files }}
-    steps:
-    - name: Checkout Sources
-      uses: actions/checkout@v4
-    - name: Setup V
-      uses: prantlf/setup-v-action@v2
-    - name: Bump version
-      id: bump
-      uses: prantlf/bump-version-action@v2
-      with:
-        bump-files: src/newchanges.v
-    - name: Shelve changes
-      uses: prantlf/shelve-changes-action@v1
-    - name: Build and Test
-      run: make RELEASE=1
-    - name: Shelve output
-      if: ${{ steps.bump.outputs.bumped == 'true' }}
-      uses: prantlf/shelve-output-action@v2
-      with:
-        extra: man
+  # linux:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     changed: ${{ steps.bump.outputs.bumped }}
+  #     changed-files: ${{ steps.bump.outputs.changed-files }}
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: prantlf/setup-v-action@v2
+  #   - uses: prantlf/bump-version-action@v2
+  #     id: bump
+  #     with:
+  #       bump-files: src/newchanges.v
+  #   - uses: prantlf/shelve-changes-action@v1
+  #   - run: make RELEASE=1
+  #   - if: ${{ steps.bump.outputs.bumped == 'true' }}
+  #     uses: prantlf/shelve-output-action@v2
+  #     with:
+  #       extra: man
 
-  linux-arm:
-    if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
-    needs:
-      - linux
+  # linux-arm:
+  #   if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
+  #   needs:
+  #     - linux
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: prantlf/setup-v-action@v2
+  #   - uses: prantlf/unshelve-changes-action@v1
+  #     if: ${{ needs.linux.outputs.changed == 'true' }}
+  #     with:
+  #       files: ${{ needs.linux.outputs.changed-files }}
+  #       discard-shelf: false
+  #   - run: |
+  #       sudo apt-get update
+  #       sudo apt-get install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
+  #   - run: make build RELEASE=1 LINUX_ARM=1
+  #   - if: ${{ needs.linux.outputs.changed == 'true' }}
+  #     uses: prantlf/shelve-output-action@v2
+  #     with:
+  #       arch: arm64
+  #       extra: man
+
+  linux-riscv:
+    # if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
+    # needs:
+    #   - linux
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Sources
-      uses: actions/checkout@v4
-    - name: Setup V
-      uses: prantlf/setup-v-action@v2
-    - name: Unshelve changes
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      uses: prantlf/unshelve-changes-action@v1
-      with:
-        files: ${{ needs.linux.outputs.changed-files }}
-        discard-shelf: false
-    - name: Install ARM Cross-Compiler
-      run: |
+    - uses: actions/checkout@v4
+    - uses: prantlf/setup-v-action@v2
+    # - uses: prantlf/unshelve-changes-action@v1
+    #   if: ${{ needs.linux.outputs.changed == 'true' }}
+    #   with:
+    #     files: ${{ needs.linux.outputs.changed-files }}
+    #     discard-shelf: false
+    - run: |
         sudo apt-get update
-        sudo apt-get install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
-    - name: Build ARM
-      run: make build RELEASE=1 LINUX_ARM=1
-    - name: Shelve output
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      uses: prantlf/shelve-output-action@v2
-      with:
-        arch: arm64
-        extra: man
+        sudo apt-get install gcc gcc-riscv64-linux-gnu binutils-riscv64-linux-gnu
+    - run: make build RELEASE=1 LINUX_RISCV=1
+    # - uses: prantlf/shelve-output-action@v2
+    #   if: ${{ needs.linux.outputs.changed == 'true' }}
+    #   with:
+    #     arch: riscv64
+    #     extra: man
 
-  macos:
-    needs:
-      - linux
-    runs-on: macos-13
-    steps:
-    - name: Checkout Sources
-      uses: actions/checkout@v4
-    - name: Setup V
-      uses: prantlf/setup-v-action@v2
-    - name: Unshelve changes
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      uses: prantlf/unshelve-changes-action@v1
-      with:
-        files: ${{ needs.linux.outputs.changed-files }}
-        discard-shelf: false
-    - name: Build and Test
-      run: make RELEASE=1
-    - name: Shelve output
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      uses: prantlf/shelve-output-action@v2
-      with:
-        extra: man
+  # macos:
+  #   needs:
+  #     - linux
+  #   runs-on: macos-13
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: prantlf/setup-v-action@v2
+  #   - uses: prantlf/unshelve-changes-action@v1
+  #     if: ${{ needs.linux.outputs.changed == 'true' }}
+  #     with:
+  #       files: ${{ needs.linux.outputs.changed-files }}
+  #       discard-shelf: false
+  #   - run: make RELEASE=1
+  #   - uses: prantlf/shelve-output-action@v2
+  #     if: ${{ needs.linux.outputs.changed == 'true' }}
+  #     with:
+  #       extra: man
 
-  macos-arm:
-    if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
-    needs:
-      - linux
-    runs-on: macos-13
-    steps:
-    - name: Checkout Sources
-      uses: actions/checkout@v4
-    - name: Setup V
-      uses: prantlf/setup-v-action@v2
-    - name: Unshelve changes
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      uses: prantlf/unshelve-changes-action@v1
-      with:
-        files: ${{ needs.linux.outputs.changed-files }}
-        discard-shelf: false
-    - name: Build ARM
-      run: make build RELEASE=1 MACOS_ARM=1
-    - name: Shelve output
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      uses: prantlf/shelve-output-action@v2
-      with:
-        arch: arm64
-        extra: man
+  # macos-arm:
+  #   if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
+  #   needs:
+  #     - linux
+  #   runs-on: macos-13
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: prantlf/setup-v-action@v2
+  #   - uses: prantlf/unshelve-changes-action@v1
+  #     if: ${{ needs.linux.outputs.changed == 'true' }}
+  #     with:
+  #       files: ${{ needs.linux.outputs.changed-files }}
+  #       discard-shelf: false
+  #   - run: make build RELEASE=1 MACOS_ARM=1
+  #   - uses: prantlf/shelve-output-action@v2
+  #     if: ${{ needs.linux.outputs.changed == 'true' }}
+  #     with:
+  #       arch: arm64
+  #       extra: man
 
-  windows:
-    needs:
-      - linux
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout Sources
-      uses: actions/checkout@v4
-    - name: Setup V
-      uses: prantlf/setup-v-action@v2
-    - name: Unshelve changes
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      uses: prantlf/unshelve-changes-action@v1
-      with:
-        files: ${{ needs.linux.outputs.changed-files }}
-        discard-shelf: false
-    - name: Install Cross-Compiler
-      run: sudo apt-get install gcc-mingw-w64-x86-64
-    - name: Build Windows
-      run: make build RELEASE=1 WINDOWS=1
-    - name: Shelve output
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      uses: prantlf/shelve-output-action@v2
-      with:
-        os: windows
+  # windows-cross:
+  #   needs:
+  #     - linux
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: prantlf/setup-v-action@v2
+  #   - uses: prantlf/unshelve-changes-action@v1
+  #     if: ${{ needs.linux.outputs.changed == 'true' }}
+  #     with:
+  #       files: ${{ needs.linux.outputs.changed-files }}
+  #       discard-shelf: false
+  #   - run: sudo apt-get install gcc-mingw-w64-x86-64
+  #   - run: make build RELEASE=1 WINDOWS=1
+  #   - uses: prantlf/shelve-output-action@v2
+  #     if: ${{ needs.linux.outputs.changed == 'true' }}
+  #     with:
+  #       os: windows
 
   # windows:
   #   needs:
   #     - linux
   #   runs-on: windows-latest
   #   steps:
-  #   - name: Checkout Sources
-  #     uses: actions/checkout@v4
-  #   - name: Setup V
-  #     uses: prantlf/setup-v-action@v2
+  #   - uses: actions/checkout@v4
+  #   - uses: prantlf/setup-v-action@v2
   #     with:
   #       install-dependencies: false
-  #   - name: Install Dependencies
-  #     run: |
+  #   - run: |
   #       md src\modules
   #       md src\modules\prantlf
   #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-cargs src\modules\prantlf\cargs
@@ -169,37 +161,31 @@ jobs:
   #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-strutil src\modules\prantlf\strutil
   #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-template src\modules\prantlf\template
   #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-yaml src\modules\prantlf\yaml
-  #   - name: Unshelve changes
-  #     if: ${{ needs.linux.outputs.changed == 'true' }}
+  #   - if: ${{ needs.linux.outputs.changed == 'true' }}
   #     uses: prantlf/unshelve-changes-action@v1
   #     with:
   #       files: ${{ needs.linux.outputs.changed-files }}
   #       discard-shelf: false
-  #   - name: Build
-  #     run: cmd /c make-exe.bat
-  #   - name: Shelve output
+  #   - run: cmd /c make-exe.bat
+  #   - uses: prantlf/shelve-output-action@v2
   #     if: ${{ needs.linux.outputs.changed == 'true' }}
-  #     uses: prantlf/shelve-output-action@v2
-
-  release:
-    if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
-    needs:
-      - linux
-      - linux-arm
-      - macos
-      - macos-arm
-      - windows
-    runs-on: macos-13
-    steps:
-    - name: Checkout sources
-      uses: actions/checkout@v4
-    - name: Unshelve changes
-      uses: prantlf/unshelve-changes-action@v1
-      with:
-        files: ${{ needs.linux.outputs.changed-files }}
-    - name: Unshelve output
-      uses: prantlf/unshelve-output-action@v5
-    - name: Publish release
-      uses: prantlf/finish-release-action@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+  # release:
+  #   if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
+  #   needs:
+  #     - linux
+  #     - linux-arm
+  #     - linux-riscv
+  #     - macos
+  #     - macos-arm
+  #     - windows-cross
+  #   runs-on: macos-13
+  #   steps:
+  #   - uses: actions/checkout@v4
+  #   - uses: prantlf/unshelve-changes-action@v1
+  #     with:
+  #       files: ${{ needs.linux.outputs.changed-files }}
+  #   - uses: prantlf/unshelve-output-action@v7
+    # - uses: prantlf/finish-release-action@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
