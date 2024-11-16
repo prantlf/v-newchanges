@@ -1,5 +1,11 @@
 # Changes
 
+## [0.7.1](https://github.com/prantlf/v-newchanges/compare/v0.7.0...v0.7.1) (2024-11-16)
+
+### Bug Fixes
+
+* Rebuild with new dependencies ([2b5f220](https://github.com/prantlf/v-newchanges/commit/2b5f2206014a917a3de0bb2badb85a10bf0a0a04))
+
 ## [0.7.0](https://github.com/prantlf/v-newchanges/compare/v0.6.0...v0.7.0) (2024-11-16)
 
 ### Features
