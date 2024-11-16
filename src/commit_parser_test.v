@@ -235,7 +235,7 @@ Fixes #101
 
 fn test_mapped_type() {
 	commits, all_commit_count := parse_commits('b1535a3ec24be7913f0005cdd617680c02086cdf
-2023-03-05
+2023-03-06
 
 defect: Replace ajv@6 with ajv-draft-04
 
@@ -252,7 +252,7 @@ Support JSON Schema draft 04 by a more modern package.
 	assert commits[0].vars.len == 5
 	assert commits[0].vars.get_one('short_hash') == 'b1535a3'
 	assert commits[0].vars.get_one('hash') == 'b1535a3ec24be7913f0005cdd617680c02086cdf'
-	assert commits[0].vars.get_one('date') == '2023-03-05'
+	assert commits[0].vars.get_one('date') == '2023-03-06'
 	assert commits[0].vars.get_one('type') == 'fix'
 	assert commits[0].vars.get_one('description') == 'Replace ajv@6 with ajv-draft-04'
 	assert all_commit_count == 1
