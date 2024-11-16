@@ -73,8 +73,19 @@ fn parse_commits(commit_log string, opts &Opts) !([]Commit, int) {
 			if is_whitespace(line) {
 				last_empty = j
 				if note_name.len > 0 {
-					val := builder.str().trim_right(' \t\r\n')
-					d.log('> collected "%s": "%s"', note_name, val)
+					mut val := builder.str().trim_right(' \t\r\n')
+					if note_name == 'type' {
+						mapped := opts.type_mapping[val] or { '' }
+						if mapped != '' {
+							d.log('> collected "%s": "%s" mapped to "%s"', note_name,
+								val, mapped)
+							val = mapped
+						} else {
+							d.log('> collected "%s": "%s" (not mapped)', note_name, val)
+						}
+					} else {
+						d.log('> collected "%s": "%s"', note_name, val)
+					}
 					vars.add_one(note_name, val)
 					note_name = ''
 				}
@@ -115,16 +126,16 @@ fn parse_commits(commit_log string, opts &Opts) !([]Commit, int) {
 		}
 
 		if !isnil(re_subject) {
-			collect_vars(subject, mut re_subject, mut vars)!
+			collect_vars(subject, mut re_subject, mut vars, opts)!
 		}
 
 		if !isnil(re_body) {
 			if isnil(re_subject) {
-				collect_vars(subject, mut re_body, mut vars)!
+				collect_vars(subject, mut re_body, mut vars, opts)!
 			}
 			j = from
 			for ; j < last_empty; j++ {
-				collect_vars(lines[j], mut re_body, mut vars)!
+				collect_vars(lines[j], mut re_body, mut vars, opts)!
 			}
 		}
 
@@ -135,7 +146,7 @@ fn parse_commits(commit_log string, opts &Opts) !([]Commit, int) {
 				from
 			}
 			for ; j < i; j++ {
-				collect_vars(lines[j], mut re_footer, mut vars)!
+				collect_vars(lines[j], mut re_footer, mut vars, opts)!
 			}
 		}
 
@@ -173,7 +184,7 @@ fn compile_re(str string) !&RegEx {
 	return unsafe { nil }
 }
 
-fn collect_vars(line string, mut re RegEx, mut vars map[string][]string) ! {
+fn collect_vars(line string, mut re RegEx, mut vars map[string][]string, opts &Opts) ! {
 	if m := re.match_str(line, onig.opt_none) {
 		if m.names.len > 0 {
 			for name, _ in m.names {
@@ -181,7 +192,13 @@ fn collect_vars(line string, mut re RegEx, mut vars map[string][]string) ! {
 					mut vals := []string{}
 					for grp in grps {
 						start, end := avoid_space_within(line, grp.start, grp.end)
-						val := line[start..end]
+						mut val := line[start..end]
+						if name == 'type' {
+							mapped := opts.type_mapping[val] or { '' }
+							if mapped != '' {
+								val = mapped
+							}
+						}
 						if d.is_enabled() {
 							vals << val
 						}

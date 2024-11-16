@@ -16,8 +16,8 @@ fn generate_changes(commits []Commit, last_version string, next_version string, 
 	repo_url = repo_url.replace('{', '\\{')
 
 	prep_data := PrepData{
-		heading: heading
-		repo_url: repo_url
+		heading:    heading
+		repo_url:   repo_url
 		tag_prefix: opts.tag_prefix
 	}
 	prep_opts := ReplacerOpts{
@@ -133,8 +133,8 @@ fn generate_changes(commits []Commit, last_version string, next_version string, 
 
 		version_data := VersionData{
 			prev_version: prev_version
-			version: this_version
-			date: this_date
+			version:      this_version
+			date:         this_date
 		}
 		version_line := version_tpl.generate(version_data)
 		lines.prepend(version_line)

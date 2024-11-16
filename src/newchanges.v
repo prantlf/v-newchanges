@@ -52,32 +52,33 @@ struct Opts {
 	quiet            bool
 	verbose          bool
 	log              string
-	tag_prefix       string = 'v'            @[json: 'tag-prefix']
+	tag_prefix       string = 'v' @[json: 'tag-prefix']
 	from             string
 	to               string
-	try_unshallow    bool              @[json: 'try-unshallow']
+	try_unshallow    bool @[json: 'try-unshallow']
 	path             string
-	repo_url         string            @[json: 'repo-url']
-	override_version string            @[json: 'override-version']
-	write_changes    string            @[json: 'write-changes']
-	write_version    string            @[json: 'write-version']
-	assume_patch     bool              @[json: 'assume-patch']
-	bump_major_0     bool              @[json: 'bump-major-0']
-	pre_release      bool              @[json: 'pre-release']
-	pre_id           string = 'next'            @[json: 'pre-id']
-	dry_run          bool              @[json: 'dry-run']
-	failure          bool = true              @[json: 'failure']
-	print_last       bool              @[json: 'print-last']
-	commit_sep       string = '----------==========----------'            @[json: 'commit-sep']
-	subject_re       string = r'^\s*(?<type>[^: ]+)\s*:\s*(?<description>.+)$'            @[json: 'subject-re']
-	body_re          string            @[json: 'body-re']
-	footer_re        string            @[json: 'footer-re']
-	version_re       string = r'^\s*(?<heading>#+)\s+(?:(?<version>\d+\.\d+\.\d+(?:-[.0-9A-Za-z-]+)?)|(?:\[(?<version>\d+\.\d+\.\d+(?:-[.0-9A-Za-z-]+)?)\])).+\((?<date>[-\d]+)\)\s*$'            @[json: 'version-re']
-	prolog           string = '# Changes'
-	version_tpl      string = '{heading} [{version}]({repo_url}/compare/{tag_prefix}{prev_version}...{tag_prefix}{version}) ({date})'            @[json: 'version-tpl']
-	change_tpl       string  = '#{heading} {title}'            @[json: 'change-tpl']
-	commit_tpl       string  = '* {description} ([{short_hash}]({repo_url}/commit/{hash}))'            @[json: 'commit-tpl']
-	logged_types     []string = ['feat', 'fix', 'perf']          @[json: 'logged-types'; split]
+	repo_url         string @[json: 'repo-url']
+	override_version string @[json: 'override-version']
+	write_changes    string @[json: 'write-changes']
+	write_version    string @[json: 'write-version']
+	assume_patch     bool   @[json: 'assume-patch']
+	bump_major_0     bool   @[json: 'bump-major-0']
+	pre_release      bool   @[json: 'pre-release']
+	pre_id           string = 'next' @[json: 'pre-id']
+	dry_run          bool   @[json: 'dry-run']
+	failure          bool = true   @[json: 'failure']
+	print_last       bool   @[json: 'print-last']
+	commit_sep       string = '----------==========----------' @[json: 'commit-sep']
+	subject_re       string = r'^\s*(?<type>[^: ]+)\s*:\s*(?<description>.+)$' @[json: 'subject-re']
+	body_re          string @[json: 'body-re']
+	footer_re        string @[json: 'footer-re']
+	version_re       string            = r'^\s*(?<heading>#+)\s+(?:(?<version>\d+\.\d+\.\d+(?:-[.0-9A-Za-z-]+)?)|(?:\[(?<version>\d+\.\d+\.\d+(?:-[.0-9A-Za-z-]+)?)\])).+\((?<date>[-\d]+)\)\s*$' @[json: 'version-re']
+	prolog           string            = '# Changes'
+	version_tpl      string            = '{heading} [{version}]({repo_url}/compare/{tag_prefix}{prev_version}...{tag_prefix}{version}) ({date})'            @[json: 'version-tpl']
+	change_tpl       string            = '#{heading} {title}'            @[json: 'change-tpl']
+	commit_tpl       string            = '* {description} ([{short_hash}]({repo_url}/commit/{hash}))'            @[json: 'commit-tpl']
+	logged_types     []string          = ['feat', 'fix', 'perf']          @[json: 'logged-types'; split]
+	type_mapping     map[string]string = {} @[json: 'type-mapping']
 	type_titles      map[string]string = {
 		'feat':            'Features'
 		'fix':             'Bug Fixes'
@@ -95,11 +96,11 @@ mut:
 
 fn main() {
 	run(Cli{
-		usage: usage
-		version: version
-		cfg_opt: 'c'
+		usage:       usage
+		version:     version
+		cfg_opt:     'c'
 		cfg_gen_arg: 'init'
-		cfg_file: '.newchanges'
+		cfg_file:    '.newchanges'
 	}, body)
 }
 

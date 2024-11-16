@@ -219,7 +219,7 @@ Fixes #101
 ----------==========----------',
 		Opts{
 		subject_re: r'^\s*(?<description>.+)$'
-		footer_re: r'^(?:Type:\s*(?<type>[^ ]+))|(?:Fixes\s*#(?<issue>[^ ]+)(?:\s*#(?<issue>[^ ]+))?)\s*$'
+		footer_re:  r'^(?:Type:\s*(?<type>[^ ]+))|(?:Fixes\s*#(?<issue>[^ ]+)(?:\s*#(?<issue>[^ ]+))?)\s*$'
 	})!
 	assert commits.len == 1
 	assert commits[0].tags.len == 0
@@ -229,6 +229,31 @@ Fixes #101
 	assert commits[0].vars.get_one('date') == '2023-03-05'
 	assert commits[0].vars.get_one('type') == 'fix'
 	assert commits[0].vars.get_more('issue') == ['87', '95', '101']
+	assert commits[0].vars.get_one('description') == 'Replace ajv@6 with ajv-draft-04'
+	assert all_commit_count == 1
+}
+
+fn test_mapped_type() {
+	commits, all_commit_count := parse_commits('b1535a3ec24be7913f0005cdd617680c02086cdf
+2023-03-05
+
+defect: Replace ajv@6 with ajv-draft-04
+
+Support JSON Schema draft 04 by a more modern package.
+
+----------==========----------',
+		Opts{
+		type_mapping: {
+			'defect': 'fix'
+		}
+	})!
+	assert commits.len == 1
+	assert commits[0].tags.len == 0
+	assert commits[0].vars.len == 5
+	assert commits[0].vars.get_one('short_hash') == 'b1535a3'
+	assert commits[0].vars.get_one('hash') == 'b1535a3ec24be7913f0005cdd617680c02086cdf'
+	assert commits[0].vars.get_one('date') == '2023-03-05'
+	assert commits[0].vars.get_one('type') == 'fix'
 	assert commits[0].vars.get_one('description') == 'Replace ajv@6 with ajv-draft-04'
 	assert all_commit_count == 1
 }

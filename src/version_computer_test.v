@@ -160,7 +160,7 @@ fn test_first_pre_release_2() {
 	]
 	next_version, next_date := compute_next_version(commits, '1.0.0', Opts{
 		pre_release: true
-		pre_id: 'beta'
+		pre_id:      'beta'
 	})!
 	assert next_version == '1.0.1-beta.0'
 	assert next_date == now_date
