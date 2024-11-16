@@ -1,5 +1,12 @@
 # Changes
 
+## [0.7.0](https://github.com/prantlf/v-newchanges/compare/v0.6.0...v0.7.0) (2024-11-16)
+
+### Features
+
+* Add a package for the riscv64 architecture ([cb80cc6](https://github.com/prantlf/v-newchanges/commit/cb80cc602baa15e9cb17b612a404fa184440336b))
+* Map non-standard change types to standard ones ([b564a6a](https://github.com/prantlf/v-newchanges/commit/b564a6aad41d017c2f654469e834a2ce75915f9f))
+
 ## [0.6.0](https://github.com/prantlf/v-newchanges/compare/v0.5.2...v0.6.0) (2024-04-26)
 
 ### Features
