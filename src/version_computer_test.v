@@ -100,7 +100,7 @@ fn test_major() {
 				'short_hash':      ['0000000']
 				'type':            ['chore']
 				'description':     ['major']
-				'BREAKING_CHANGE': ['break']
+				'BREAKING CHANGE': ['break']
 			}
 		},
 	]

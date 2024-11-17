@@ -1,6 +1,6 @@
 import strings { new_builder }
 import prantlf.onig { NoMatch, RegEx, onig_compile }
-import prantlf.strutil { avoid_space_within, is_whitespace, replace_u8 }
+import prantlf.strutil { avoid_space_within, is_whitespace }
 
 fn parse_commits(commit_log string, opts &Opts) !([]Commit, int) {
 	d.log_str('parse recent commits')
@@ -104,7 +104,7 @@ fn parse_commits(commit_log string, opts &Opts) !([]Commit, int) {
 					if m := re_note.match_str(line, onig.opt_none) {
 						if name_g := m.group_by_index(1) {
 							name_s, name_e := avoid_space_within(line, name_g.start, name_g.end)
-							note_name = replace_u8(line[name_s..name_e], ` `, `_`)
+							note_name = line[name_s..name_e]
 							builder.clear()
 							if start := m.group_text_by_index(line, 2) {
 								if start.len > 0 {

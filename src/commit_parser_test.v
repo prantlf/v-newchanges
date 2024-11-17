@@ -60,7 +60,7 @@ Also, JSON Schema drafts 06 and 07 are handled by AJV@8 instead of AJV@6. It sho
 	assert commits[0].vars.get_one('date') == '2023-03-05'
 	assert commits[0].vars.get_one('type') == 'feat'
 	assert commits[0].vars.get_one('description') == 'Support JSON Schema drafts 2019-09 and 2020-12 and JSON Type Definition'
-	assert commits[0].vars.get_one('BREAKING_CHANGE') == "The default environment recognises only JSON Schema drafts 06 and 07 automatically. Not 04 any more. The environment for JSON Schema drafts 04 has to be selected explicitly.
+	assert commits[0].vars.get_one('BREAKING CHANGE') == "The default environment recognises only JSON Schema drafts 06 and 07 automatically. Not 04 any more. The environment for JSON Schema drafts 04 has to be selected explicitly.
 Also, JSON Schema drafts 06 and 07 are handled by AJV@8 instead of AJV@6. It shouldn't make any difference, but the implementation is new and could perform a stricter validation."
 	assert all_commit_count == 1
 }
@@ -86,7 +86,7 @@ REMARKS: Upgrade AJV to the latest version and retain the previous AJV@6 to be a
 	assert commits[0].vars.get_one('date') == '2023-03-05'
 	assert commits[0].vars.get_one('type') == 'feat'
 	assert commits[0].vars.get_one('description') == 'Support JSON Schema drafts 2019-09 and 2020-12 and JSON Type Definition'
-	assert commits[0].vars.get_one('BREAKING_CHANGE') == "The default environment recognises only JSON Schema drafts 06 and 07 automatically. Not 04 any more. The environment for JSON Schema drafts 04 has to be selected explicitly.
+	assert commits[0].vars.get_one('BREAKING CHANGE') == "The default environment recognises only JSON Schema drafts 06 and 07 automatically. Not 04 any more. The environment for JSON Schema drafts 04 has to be selected explicitly.
 Also, JSON Schema drafts 06 and 07 are handled by AJV@8 instead of AJV@6. It shouldn't make any difference, but the implementation is new and could perform a stricter validation."
 	assert commits[0].vars.get_one('REMARKS') == 'Upgrade AJV to the latest version and retain the previous AJV@6 to be able to support JSON Schema draft 04.'
 	assert all_commit_count == 1

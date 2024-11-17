@@ -88,7 +88,7 @@ struct Opts {
 		'style':           'Source Code Styling'
 		'build':           'Build Configuration'
 		'chore':           'Chores'
-		'BREAKING_CHANGE': 'BREAKING CHANGES'
+		'BREAKING CHANGE': 'BREAKING CHANGES'
 	} @[json: 'type-titles'; section]
 mut:
 	heading int = 2

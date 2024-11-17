@@ -141,7 +141,7 @@ fn test_fix_with_breaking_change() {
 				'hash':            ['87205c2427a0ebe0d791a4189b2b2346506601b3']
 				'date':            ['2023-03-04']
 				'description':     ['Upgrade dependencies and require Node.js 14']
-				'BREAKING_CHANGE': ['* Dropped support for Node.js 12. The minimum supported version is Node.js 14.
+				'BREAKING CHANGE': ['* Dropped support for Node.js 12. The minimum supported version is Node.js 14.
 * Solaris is not upported any more, because Node.js dropped support for it.']
 			}
 		},
@@ -174,7 +174,7 @@ fn test_fix_and_chore_with_breaking_change() {
 				'hash':            ['87205c2427a0ebe0d791a4189b2b2346506601b3']
 				'date':            ['2023-03-04']
 				'description':     ['Upgrade dependencies and require Node.js 14']
-				'BREAKING_CHANGE': ['* Dropped support for Node.js 12. The minimum supported version is Node.js 14.
+				'BREAKING CHANGE': ['* Dropped support for Node.js 12. The minimum supported version is Node.js 14.
 * Solaris is not upported any more, because Node.js dropped support for it.']
 			}
 		},
@@ -186,7 +186,7 @@ fn test_fix_and_chore_with_breaking_change() {
 				'hash':            ['4a8f2d9c27428da32b95f607bf7952190636af9f']
 				'date':            ['2019-12-22']
 				'description':     ['Upgrade package dependencies']
-				'BREAKING_CHANGE': ['* Dependencies (commander, at least) dropped support for Node.js 4. Node.js 6 should still work, but officially it is not supported either.
+				'BREAKING CHANGE': ['* Dependencies (commander, at least) dropped support for Node.js 4. Node.js 6 should still work, but officially it is not supported either.
 You should upgrade to the current or still supported Node.js LTS version.']
 			}
 		},

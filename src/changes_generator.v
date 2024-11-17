@@ -50,7 +50,7 @@ fn generate_changes(commits []Commit, last_version string, next_version string, 
 
 			typ := commit.vars.get_one('type')
 			if typ.len > 0 {
-				broken := commit.vars.get_more('BREAKING_CHANGE')
+				broken := commit.vars.get_more('BREAKING CHANGE')
 				if broken.len > 0 {
 					changes.add_more('broken', broken)
 					if typ !in opts.logged_types && typ !in broken_changes {
@@ -91,7 +91,7 @@ fn generate_changes(commits []Commit, last_version string, next_version string, 
 				lines.prepend('')
 			}
 
-			title := opts.type_titles['BREAKING_CHANGE'] or { 'BREAKING CHANGES' }
+			title := opts.type_titles['BREAKING CHANGE'] or { 'BREAKING CHANGES' }
 			change_data := ChangeData{
 				title: title
 			}

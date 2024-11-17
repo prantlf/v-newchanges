@@ -41,7 +41,7 @@ fn compute_next_version(commits []Commit, last_version string, opts &Opts) !(str
 			continue
 		}
 
-		if commit.vars.has('BREAKING_CHANGE') {
+		if commit.vars.has('BREAKING CHANGE') {
 			if d.is_enabled() {
 				d.log_str('major: "${commit.vars.get_one('short_hash')}" "${commit.vars.get_one('description')}"')
 			}
