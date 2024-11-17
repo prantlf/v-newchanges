@@ -78,7 +78,7 @@ struct Opts {
 	change_tpl       string            = '#{heading} {title}'            @[json: 'change-tpl']
 	commit_tpl       string            = '* {description} ([{short_hash}]({repo_url}/commit/{hash}))'            @[json: 'commit-tpl']
 	logged_types     []string          = ['feat', 'fix', 'perf']          @[json: 'logged-types'; split]
-	type_mapping     map[string]string = {} @[json: 'type-mapping']
+	type_mapping     map[string]string = {} @[json: 'type-mapping'; section]
 	type_titles      map[string]string = {
 		'feat':            'Features'
 		'fix':             'Bug Fixes'
@@ -89,7 +89,7 @@ struct Opts {
 		'build':           'Build Configuration'
 		'chore':           'Chores'
 		'BREAKING_CHANGE': 'BREAKING CHANGES'
-	} @[json: 'type-titles']
+	} @[json: 'type-titles'; section]
 mut:
 	heading int = 2
 }
