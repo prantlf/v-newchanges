@@ -1,5 +1,21 @@
 # Changes
 
+## [0.8.0](https://github.com/prantlf/v-newchanges/compare/v0.7.1...v0.8.0) (2024-11-17)
+
+### Features
+
+* Prefer sections for maps when saving the initial ini file ([36aa377](https://github.com/prantlf/v-newchanges/commit/36aa3779cec993035ac370dcf449980add2b9db2))
+
+### Bug Fixes
+
+* Stop using underscores in configurable titles for notes like BREAKING_CHANGE ([d42c272](https://github.com/prantlf/v-newchanges/commit/d42c27201812f2df0a8e8bcc5f4ad8f1d6b26a84))
+
+### BREAKING CHANGES
+
+If you configured the title of the breaking change notes using the key `BREAKING_CHANGE`, change it to `BREAKING CHANGE`. If you used other note sections with spaces in their names, do the same - use the same note name to configure the section title - with spaces.
+
+When the default ini file is saved, type-mapping and type-titles will be stord in sectoins with properties instead of with a single long property. The other way of representing a map - a string with colon and common delimiters - is still supported, it is just not the default one.
+
 ## [0.7.1](https://github.com/prantlf/v-newchanges/compare/v0.7.0...v0.7.1) (2024-11-16)
 
 ### Bug Fixes
