@@ -28,7 +28,7 @@ jobs:
     - uses: prantlf/shelve-changes-action@v1
     - run: make RELEASE=1
     - if: ${{ steps.bump.outputs.bumped == 'true' }}
-      uses: prantlf/shelve-output-action@v2
+      uses: prantlf/shelve-output-action@v3
       with:
         extra: man
 
@@ -40,7 +40,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: prantlf/setup-v-action@v2
-    - uses: prantlf/unshelve-changes-action@v1
+    - uses: prantlf/unshelve-changes-action@v2
       if: ${{ needs.linux.outputs.changed == 'true' }}
       with:
         files: ${{ needs.linux.outputs.changed-files }}
@@ -50,7 +50,7 @@ jobs:
         sudo apt-get install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
     - run: make build RELEASE=1 LINUX_ARM=1
     - if: ${{ needs.linux.outputs.changed == 'true' }}
-      uses: prantlf/shelve-output-action@v2
+      uses: prantlf/shelve-output-action@v3
       with:
         arch: arm64
         extra: man
@@ -63,7 +63,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: prantlf/setup-v-action@v2
-    - uses: prantlf/unshelve-changes-action@v1
+    - uses: prantlf/unshelve-changes-action@v2
       if: ${{ needs.linux.outputs.changed == 'true' }}
       with:
         files: ${{ needs.linux.outputs.changed-files }}
@@ -72,7 +72,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install gcc gcc-riscv64-linux-gnu binutils-riscv64-linux-gnu
     - run: make build RELEASE=1 LINUX_RISCV=1
-    - uses: prantlf/shelve-output-action@v2
+    - uses: prantlf/shelve-output-action@v3
       if: ${{ needs.linux.outputs.changed == 'true' }}
       with:
         arch: riscv64
@@ -85,13 +85,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: prantlf/setup-v-action@v2
-    - uses: prantlf/unshelve-changes-action@v1
+    - uses: prantlf/unshelve-changes-action@v2
       if: ${{ needs.linux.outputs.changed == 'true' }}
       with:
         files: ${{ needs.linux.outputs.changed-files }}
         discard-shelf: false
     - run: make RELEASE=1
-    - uses: prantlf/shelve-output-action@v2
+    - uses: prantlf/shelve-output-action@v3
       if: ${{ needs.linux.outputs.changed == 'true' }}
       with:
         extra: man
@@ -104,13 +104,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: prantlf/setup-v-action@v2
-    - uses: prantlf/unshelve-changes-action@v1
+    - uses: prantlf/unshelve-changes-action@v2
       if: ${{ needs.linux.outputs.changed == 'true' }}
       with:
         files: ${{ needs.linux.outputs.changed-files }}
         discard-shelf: false
     - run: make build RELEASE=1 MACOS_ARM=1
-    - uses: prantlf/shelve-output-action@v2
+    - uses: prantlf/shelve-output-action@v3
       if: ${{ needs.linux.outputs.changed == 'true' }}
       with:
         arch: arm64
@@ -123,14 +123,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: prantlf/setup-v-action@v2
-    - uses: prantlf/unshelve-changes-action@v1
+    - uses: prantlf/unshelve-changes-action@v2
       if: ${{ needs.linux.outputs.changed == 'true' }}
       with:
         files: ${{ needs.linux.outputs.changed-files }}
         discard-shelf: false
     - run: sudo apt-get install gcc-mingw-w64-x86-64
     - run: make build RELEASE=1 WINDOWS=1
-    - uses: prantlf/shelve-output-action@v2
+    - uses: prantlf/shelve-output-action@v3
       if: ${{ needs.linux.outputs.changed == 'true' }}
       with:
         os: windows
@@ -162,12 +162,12 @@ jobs:
   #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-template src\modules\prantlf\template
   #       git clone --depth=1 --recursive --shallow-submodules https://github.com/prantlf/v-yaml src\modules\prantlf\yaml
   #   - if: ${{ needs.linux.outputs.changed == 'true' }}
-  #     uses: prantlf/unshelve-changes-action@v1
+  #     uses: prantlf/unshelve-changes-action@v2
   #     with:
   #       files: ${{ needs.linux.outputs.changed-files }}
   #       discard-shelf: false
   #   - run: cmd /c make-exe.bat
-  #   - uses: prantlf/shelve-output-action@v2
+  #   - uses: prantlf/shelve-output-action@v3
   #     if: ${{ needs.linux.outputs.changed == 'true' }}
   
   release:
@@ -182,7 +182,7 @@ jobs:
     runs-on: macos-13
     steps:
     - uses: actions/checkout@v4
-    - uses: prantlf/unshelve-changes-action@v1
+    - uses: prantlf/unshelve-changes-action@v2
       with:
         files: ${{ needs.linux.outputs.changed-files }}
     - uses: prantlf/unshelve-output-action@v7
