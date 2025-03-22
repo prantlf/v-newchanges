@@ -1,5 +1,11 @@
 # Changes
 
+## [0.8.1](https://github.com/prantlf/v-newchanges/compare/v0.8.0...v0.8.1) (2025-03-22)
+
+### Bug Fixes
+
+* Adapt to breaking changes in teh V compiler ([d090488](https://github.com/prantlf/v-newchanges/commit/d0904888b3c02248910b159867cc3639f1a45271))
+
 ## [0.8.0](https://github.com/prantlf/v-newchanges/compare/v0.7.1...v0.8.0) (2024-11-17)
 
 ### Features
