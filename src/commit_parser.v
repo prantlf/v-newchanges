@@ -72,7 +72,7 @@ fn parse_commits(commit_log string, opts &Opts) !([]Commit, int) {
 
 			if is_whitespace(line) {
 				last_empty = j
-				if note_name.len > 0 {
+				if note_name != '' {
 					mut val := builder.str().trim_right(' \t\r\n')
 					if note_name == 'type' {
 						mapped := opts.type_mapping[val] or { '' }
@@ -91,12 +91,12 @@ fn parse_commits(commit_log string, opts &Opts) !([]Commit, int) {
 				}
 			} else {
 				d.log_str(line)
-				if note_name.len > 0 {
+				if note_name != '' {
 					builder.writeln(line)
 					// } else {
 					// 	note_name, note_val = try_note(line)
 					// 	builder.clear()
-					// 	if note_val.len > 0 {
+					// 	if note_val != '' {
 					// 		builder.writeln(note_val)
 					// 	}
 					// }
@@ -107,7 +107,7 @@ fn parse_commits(commit_log string, opts &Opts) !([]Commit, int) {
 							note_name = line[name_s..name_e]
 							builder.clear()
 							if start := m.group_text_by_index(line, 2) {
-								if start.len > 0 {
+								if start != '' {
 									builder.writeln(start)
 								}
 							}
@@ -178,7 +178,7 @@ fn parse_commits(commit_log string, opts &Opts) !([]Commit, int) {
 }
 
 fn compile_re(str string) !&RegEx {
-	if str.len > 0 {
+	if str != '' {
 		return onig_compile(str, onig.opt_none)!
 	}
 	return unsafe { nil }
@@ -225,12 +225,12 @@ fn collect_tags(line string, re &RegEx) !([]string, []string) {
 	mut ignored := []string{}
 	mut start := 0
 	for {
-		start = line.index_after('tag: ', start)
+		start = line.index_after('tag: ', start) or { -1 }
 		if start < 0 {
 			break
 		}
 		start += 5
-		end := line.index_after(',', start)
+		end := line.index_after(',', start) or { -1 }
 		tag := if end < 0 {
 			line[start..]
 		} else {

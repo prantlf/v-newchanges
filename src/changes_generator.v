@@ -7,7 +7,7 @@ fn generate_changes(commits []Commit, last_version string, next_version string, 
 	d.stop_ticking()
 	heading := repeat(`#`, opts.heading)
 
-	mut repo_url := if opts.repo_url.len > 0 {
+	mut repo_url := if opts.repo_url != '' {
 		opts.repo_url
 	} else {
 		remote_url := get_remote_url()!
@@ -49,7 +49,7 @@ fn generate_changes(commits []Commit, last_version string, next_version string, 
 			commit := commits[i]
 
 			typ := commit.vars.get_one('type')
-			if typ.len > 0 {
+			if typ != '' {
 				broken := commit.vars.get_more('BREAKING CHANGE')
 				if broken.len > 0 {
 					changes.add_more('broken', broken)

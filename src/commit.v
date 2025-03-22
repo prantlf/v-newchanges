@@ -41,7 +41,7 @@ fn (m map[string][]string) get_more(name string) []string {
 
 // fn (m map[string][]string) get_one_opt(name string) ?string {
 // 	val := m[name]
-// 	return if val.len > 0 {
+// 	return if val != '' {
 // 		val[0]
 // 	} else {
 // 		none

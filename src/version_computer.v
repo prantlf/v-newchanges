@@ -22,7 +22,7 @@ fn compute_next_version(commits []Commit, last_version string, opts &Opts) !(str
 			break
 		}
 	}
-	if next_version.len > 0 {
+	if next_version != '' {
 		next_version = get_version(next_version, opts)
 		d.log('previous version read from a commit: "%s"', next_version)
 	} else {
@@ -37,7 +37,7 @@ fn compute_next_version(commits []Commit, last_version string, opts &Opts) !(str
 		}
 
 		typ := commit.vars.get_one('type')
-		if typ.len == 0 {
+		if typ == '' {
 			continue
 		}
 

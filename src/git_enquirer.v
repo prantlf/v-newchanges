@@ -35,9 +35,9 @@ fn get_repo_url(remote_url string) !string {
 }
 
 fn get_commits(version string, date string, opts &Opts) !string {
-	from := if opts.from.len > 0 {
+	from := if opts.from != '' {
 		opts.from
-	} else if version.len > 0 {
+	} else if version != '' {
 		'${opts.tag_prefix}${version}'
 	} else {
 		''
@@ -54,10 +54,10 @@ fn get_commits(version string, date string, opts &Opts) !string {
 		}
 	}
 	cmd = 'git log --format="%H%n%as%n%D%n%B%n${opts.commit_sep}"'
-	if from.len > 0 || opts.to.len > 0 {
+	if from != '' || opts.to != '' {
 		cmd += ' ${from}..${opts.to}'
 	}
-	if opts.path.len > 0 {
+	if opts.path != '' {
 		cmd += ' -- "${opts.path}"'
 	}
 	return execute_git(cmd)!

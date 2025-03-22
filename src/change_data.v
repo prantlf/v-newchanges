@@ -28,7 +28,7 @@ fn get_one_field[T](data &T, name string) string {
 		if field.name == name {
 			$if field.is_array {
 				val := data.$(field.name)
-				return if val.len > 0 {
+				return if val != '' {
 					val[0]
 				} else {
 					''

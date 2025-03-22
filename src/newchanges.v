@@ -111,12 +111,12 @@ fn body(mut opts Opts, _args []string) ! {
 	mut last_change := -1
 	mut last_version := ''
 	mut last_date := ''
-	changes_file_found := if opts.log.len > 0 {
+	changes_file_found := if opts.log != '' {
 		changes_file = opts.log
 		exists(opts.log)
 	} else {
 		changes_dir = get_git_root()!
-		if changes_dir.len > 0 {
+		if changes_dir != '' {
 			if changes_name := exist_in(['CHANGELOG.md', 'CHANGES.md'], changes_dir) {
 				changes_file = join_path_single(changes_dir, changes_name)
 				true
@@ -140,7 +140,7 @@ fn body(mut opts Opts, _args []string) ! {
 				}
 				return error(msg)
 			}
-			contents := if opts.verbose || opts.write_changes.len > 0 {
+			contents := if opts.verbose || opts.write_changes != '' {
 				changes[first_line..last_line].join('\n')
 			} else {
 				''
@@ -154,10 +154,10 @@ fn body(mut opts Opts, _args []string) ! {
 				}
 				println('version ${last_ver} and ${last_line - first_line} lines printed')
 			}
-			if opts.write_changes.len > 0 {
+			if opts.write_changes != '' {
 				write_file(opts.write_changes, contents)!
 			}
-			if opts.write_version.len > 0 {
+			if opts.write_version != '' {
 				write_file(opts.write_version, last_ver)!
 			}
 			return
@@ -197,13 +197,13 @@ fn body(mut opts Opts, _args []string) ! {
 		return error(msg)
 	}
 
-	next_version, next_date := if opts.override_version.len > 0 {
+	next_version, next_date := if opts.override_version != '' {
 		semver.from(opts.override_version)!
 		date := now().ymmdd()
 		opts.override_version, date
 	} else {
 		ver, date := compute_next_version(commits, last_version, opts)!
-		if ver.len == 0 {
+		if ver == '' {
 			loc := get_location(last_version, last_date, opts)
 			commit_pl := if commits.len > 1 {
 				's'
@@ -224,7 +224,7 @@ fn body(mut opts Opts, _args []string) ! {
 	mut prefix := ''
 	mut suffix := ''
 	mut contents := ''
-	if (changes_file.len == 0 && changes_dir.len == 0) || opts.dry_run {
+	if (changes_file == '' && changes_dir == '') || opts.dry_run {
 		contents = new_changes.join('\n')
 		print(contents)
 		if !opts.quiet {
@@ -239,7 +239,7 @@ fn body(mut opts Opts, _args []string) ! {
 				prefix = '\n'
 			}
 		}
-		if changes_file.len == 0 {
+		if changes_file == '' {
 			changes_file = join_path_single(changes_dir, 'CHANGELOG.md')
 		}
 		if !opts.quiet {
@@ -261,31 +261,31 @@ fn body(mut opts Opts, _args []string) ! {
 		println('${prefix}discovered ${commits.len} classified commit${commit_pl} from ${all_commit_count} total ${loc}')
 		println('version ${next_version} (${next_date}) and ${new_changes.len} lines ${suffix}')
 	}
-	if opts.write_changes.len > 0 {
-		if contents.len == 0 {
+	if opts.write_changes != '' {
+		if contents == '' {
 			contents = new_changes.join('\n')
 		}
 		write_file(opts.write_changes, contents)!
 	}
-	if opts.write_version.len > 0 {
+	if opts.write_version != '' {
 		write_file(opts.write_version, next_version)!
 	}
 }
 
 fn get_location(last_version string, last_date string, opts &Opts) string {
-	from := if opts.from.len > 0 {
+	from := if opts.from != '' {
 		opts.from
-	} else if last_version.len > 0 {
+	} else if last_version != '' {
 		'${opts.tag_prefix}${last_version} (${last_date})'
 	} else {
 		'the beginning'
 	}
-	to := if opts.to.len > 0 {
+	to := if opts.to != '' {
 		' until ${opts.to}'
 	} else {
 		''
 	}
-	at := if opts.path.len > 0 {
+	at := if opts.path != '' {
 		' at "${opts.path}"'
 	} else {
 		''

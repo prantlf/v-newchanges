@@ -61,7 +61,7 @@ fn get_last_changes(changes []string, opts &Opts) !(int, int, string) {
 	for i in 0 .. changes.len {
 		line := changes[i]
 		d.log('%d: "%s"', i, line)
-		if line.len == 0 {
+		if line == '' {
 			continue
 		}
 		if m := re_version.match_str(line, onig.opt_none) {
