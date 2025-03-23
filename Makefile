@@ -27,3 +27,6 @@ build:
 test:
 	v test .
 	./test.sh
+
+clean:
+	rm -rf src/*_test src/*.dSYM vp
