@@ -12,6 +12,7 @@ on:
   pull_request:
 
 jobs:
+
   linux:
     runs-on: ubuntu-latest
     outputs:
@@ -29,29 +30,6 @@ jobs:
     - if: ${{ steps.bump.outputs.bumped == 'true' }}
       uses: prantlf/shelve-output-action@v4
       with:
-        extra: man
-
-  linux-arm:
-    if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
-    needs:
-      - linux
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v7
-    - uses: prantlf/setup-v-action@v4
-    - uses: prantlf/unshelve-changes-action@v3
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      with:
-        files: ${{ needs.linux.outputs.changed-files }}
-        discard-shelf: false
-    - run: |
-        sudo apt-get update
-        sudo apt-get install gcc gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu
-    - run: make build RELEASE=1 LINUX_ARM=1
-    - if: ${{ needs.linux.outputs.changed == 'true' }}
-      uses: prantlf/shelve-output-action@v4
-      with:
-        arch: arm64
         extra: man
 
   linux-riscv:
@@ -76,99 +54,3 @@ jobs:
       with:
         arch: riscv64
         extra: man
-
-  macos:
-    needs:
-      - linux
-    runs-on: macos-15-intel
-    steps:
-    - uses: actions/checkout@v7
-    - uses: prantlf/setup-v-action@v4
-    - uses: prantlf/unshelve-changes-action@v3
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      with:
-        files: ${{ needs.linux.outputs.changed-files }}
-        discard-shelf: false
-    - run: make RELEASE=1
-    - uses: prantlf/shelve-output-action@v4
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      with:
-        extra: man
-
-  macos-arm:
-    if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
-    needs:
-      - linux
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v7
-    - uses: prantlf/setup-v-action@v4
-    - uses: prantlf/unshelve-changes-action@v3
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      with:
-        files: ${{ needs.linux.outputs.changed-files }}
-        discard-shelf: false
-    - run: make build RELEASE=1 MACOS_ARM=1
-    - uses: prantlf/shelve-output-action@v4
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      with:
-        arch: arm64
-        extra: man
-
-  windows-cross:
-    needs:
-      - linux
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v7
-    - uses: prantlf/setup-v-action@v4
-    - uses: prantlf/unshelve-changes-action@v3
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      with:
-        files: ${{ needs.linux.outputs.changed-files }}
-        discard-shelf: false
-    - run: sudo apt-get install gcc-mingw-w64-x86-64
-    - run: make build RELEASE=1 WINDOWS=1
-    - uses: prantlf/shelve-output-action@v4
-      if: ${{ needs.linux.outputs.changed == 'true' }}
-      with:
-        os: windows
-
-  # windows:
-  #   needs:
-  #     - linux
-  #   runs-on: windows-latest
-  #   steps:
-  #   - uses: actions/checkout@v7
-  #   - uses: prantlf/setup-v-action@v4
-  #   - if: ${{ needs.linux.outputs.changed == 'true' }}
-  #     uses: prantlf/unshelve-changes-action@v3
-  #     with:
-  #       files: ${{ needs.linux.outputs.changed-files }}
-  #       discard-shelf: false
-  #   - run: cmd /c make-exe.bat
-  #   - uses: prantlf/shelve-output-action@v4
-  #     if: ${{ needs.linux.outputs.changed == 'true' }}
-
-  release:
-    if: ${{ github.ref_name == 'master' && needs.linux.outputs.changed == 'true' }}
-    permissions:
-      actions: write
-      contents: write
-    needs:
-      - linux
-      - linux-arm
-      - linux-riscv
-      - macos
-      - macos-arm
-      - windows-cross
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v7
-    - uses: prantlf/unshelve-changes-action@v3
-      with:
-        files: ${{ needs.linux.outputs.changed-files }}
-    - uses: prantlf/unshelve-output-action@v8
-    - uses: prantlf/finish-release-action@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
