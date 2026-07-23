@@ -11,8 +11,7 @@ fn test_unclassified_commit() {
 
 Initial commit
 
-----------==========----------',
-		Opts{})!
+----------==========----------', Opts{})!
 	assert commits.len == 0
 	assert all_commit_count == 1
 }
@@ -25,8 +24,7 @@ fix: Replace ajv@6 with ajv-draft-04
 
 Support JSON Schema draft 04 by a more modern package.
 
-----------==========----------',
-		Opts{})!
+----------==========----------', Opts{})!
 	assert commits.len == 1
 	assert commits[0].tags.len == 0
 	assert commits[0].vars.len == 5
@@ -50,8 +48,7 @@ to be able to support JSON Schema draft 04.
 BREAKING CHANGE: The default environment recognises only JSON Schema drafts 06 and 07 automatically. Not 04 any more. The environment for JSON Schema drafts 04 has to be selected explicitly.
 Also, JSON Schema drafts 06 and 07 are handled by AJV@8 instead of AJV@6. It shouldn't make any difference, but the implementation is new and could perform a stricter validation.
 
-----------==========----------",
-		Opts{})!
+----------==========----------", Opts{})!
 	assert commits.len == 1
 	assert commits[0].tags.len == 0
 	assert commits[0].vars.len == 6
@@ -76,8 +73,7 @@ Also, JSON Schema drafts 06 and 07 are handled by AJV@8 instead of AJV@6. It sho
 
 REMARKS: Upgrade AJV to the latest version and retain the previous AJV@6 to be able to support JSON Schema draft 04.
 
-----------==========----------",
-		Opts{})!
+----------==========----------", Opts{})!
 	assert commits.len == 1
 	assert commits[0].tags.len == 0
 	assert commits[0].vars.len == 7
@@ -98,8 +94,7 @@ fn test_simple_release_commit() {
 tag: v13.0.0
 13.0.0
 
-----------==========----------',
-		Opts{})!
+----------==========----------', Opts{})!
 	assert commits.len == 1
 	assert commits[0].tags == ['v13.0.0']
 	assert commits[0].vars.len == 3
@@ -125,8 +120,7 @@ chore(release): 13.0.0 [skip ci]
 
 * The default environment recognises only JSON Schema drafts 06 and 07 automatically. Not 04 any more. The environment for JSON Schema drafts 04 has to be selected explicitly. Also, JSON Schema drafts 06 and 07 are handled by AJV@8 instead of AJV@6. It shouldn't make any difference, but the implementation is new and could perform a stricter validation.
 
-----------==========----------",
-		Opts{})!
+----------==========----------", Opts{})!
 	assert commits.len == 1
 	assert commits[0].tags == ['v13.0.0']
 	assert commits[0].vars.len == 5
@@ -151,8 +145,7 @@ chore(release): 14.0.3 [skip ci]
 * Ensure error location by custom parsing ([9757213](https://github.com/prantlf/jsonlint/commit/9757213eda5de9684099024d0c4f59e4d4f59c97))
 * Upgrade dependencies ([30f611a](https://github.com/prantlf/jsonlint/commit/30f611a1fc24a9003929a1f399d1694de65401ed))
 
-----------==========----------',
-		Opts{})!
+----------==========----------', Opts{})!
 	assert commits.len == 1
 	assert commits[0].tags == ['v14.0.3']
 	assert commits[0].vars.len == 5
@@ -170,8 +163,7 @@ fn test_custom_description_1() {
 
 Replace ajv@6 with ajv-draft-04 (fix)
 
-----------==========----------',
-		Opts{
+----------==========----------', Opts{
 		subject_re: r'^\s*(?<description>.+)\s*\((?<type>[^ ]+)\)\s*$'
 	})!
 	assert commits.len == 1
@@ -191,8 +183,7 @@ fn test_custom_description_2() {
 
 Replace ajv@6 with ajv-draft-04 (fix, #87, #101)
 
-----------==========----------',
-		Opts{
+----------==========----------', Opts{
 		subject_re: r'^\s*(?<description>.+)\s*\((?<type>[^ ]+)(?:\s*,\s*#(?<issue>[^ ]+))?(?:\s*,\s*#(?<issue>[^ ]+))?\)\s*$'
 	})!
 	assert commits.len == 1
@@ -216,8 +207,7 @@ Replace ajv@6 with ajv-draft-04
 Type: fix
 Fixes #87 #95
 Fixes #101
-----------==========----------',
-		Opts{
+----------==========----------', Opts{
 		subject_re: r'^\s*(?<description>.+)$'
 		footer_re:  r'^(?:Type:\s*(?<type>[^ ]+))|(?:Fixes\s*#(?<issue>[^ ]+)(?:\s*#(?<issue>[^ ]+))?)\s*$'
 	})!
@@ -241,8 +231,7 @@ defect: Replace ajv@6 with ajv-draft-04
 
 Support JSON Schema draft 04 by a more modern package.
 
-----------==========----------',
-		Opts{
+----------==========----------', Opts{
 		type_mapping: {
 			'defect': 'fix'
 		}

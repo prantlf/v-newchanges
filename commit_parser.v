@@ -77,8 +77,7 @@ fn parse_commits(commit_log string, opts &Opts) !([]Commit, int) {
 					if note_name == 'type' {
 						mapped := opts.type_mapping[val] or { '' }
 						if mapped != '' {
-							d.log('> collected "%s": "%s" mapped to "%s"', note_name,
-								val, mapped)
+							d.log('> collected "%s": "%s" mapped to "%s"', note_name, val, mapped)
 							val = mapped
 						} else {
 							d.log('> collected "%s": "%s" (not mapped)', note_name, val)

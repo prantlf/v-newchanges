@@ -29,4 +29,4 @@ test:
 	./test.sh
 
 clean:
-	rm -rf src/*_test src/*.dSYM vp
+	rm -rf *_test *.dSYM vp
