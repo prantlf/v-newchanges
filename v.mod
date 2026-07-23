@@ -1,7 +1,7 @@
 Module {
 	name: 'newchanges'
 	description: 'Creates or updates the changelog file from commit messages.'
-	version: '0.8.2'
+	version: '0.9.0'
 	license: 'MIT'
 	dependencies: [
 		'prantlf.cli', 'prantlf.debug', 'prantlf.onig', 'prantlf.osutil',
