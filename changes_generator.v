@@ -2,7 +2,7 @@ import os { create }
 import strings { repeat }
 import prantlf.template { ReplacerOpts, parse_replacer_opt, parse_template }
 
-fn generate_changes(commits []Commit, last_version string, next_version string, next_date string, opts &Opts) ![]string {
+fn generate_changes(commits []Commit, last_version string, next_version string, next_date string, next_product string, opts &Opts) ![]string {
 	d.log_str('generate new changes')
 	d.stop_ticking()
 	heading := repeat(`#`, opts.heading)
@@ -132,6 +132,7 @@ fn generate_changes(commits []Commit, last_version string, next_version string, 
 		}
 
 		version_data := VersionData{
+			product:      next_product
 			prev_version: prev_version
 			version:      this_version
 			date:         this_date

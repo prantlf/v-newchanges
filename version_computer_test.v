@@ -30,7 +30,7 @@ fn test_last_version_same() {
 	assert next_date == ''
 }
 
-fn test_last_version_same_asume() {
+fn test_last_version_same_assume() {
 	commits := [
 		Commit{
 			tags: ['v1.0.0']
@@ -292,4 +292,24 @@ fn test_from_commit_2_assume() {
 	})!
 	assert next_version == '2.0.1'
 	assert next_date == now_date
+}
+
+fn test_from_one_number() {
+	next_product := compute_next_product('26')
+	assert next_product == '27'
+}
+
+fn test_from_two_numbers() {
+	next_product := compute_next_product('26.1')
+	assert next_product == '26.2'
+}
+
+fn test_from_last_number() {
+	next_product := compute_next_product('26.4')
+	assert next_product == '27.1'
+}
+
+fn test_from_three_numbers() {
+	next_product := compute_next_product('26.1.4')
+	assert next_product == '26.1.5'
 }

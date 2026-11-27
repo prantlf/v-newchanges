@@ -39,6 +39,7 @@ Updates the changelog file using git log messages by default if no command is sp
     -p|--path <path>          consider only specific path (default: git root)
     -r|--repo-url <url>       URL of the git repository (default: from git)
     -o|--override-version <v> set the new version to the specified value
+    --override-product <v>    set the product version to the specified value
     -e|--write-changes <file> write the new changes to the specified file
     -w|--write-version <file> write the version number to the specified file
     -a|--assume-patch         assume a patch release for insignificant commits

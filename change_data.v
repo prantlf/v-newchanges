@@ -14,7 +14,7 @@ fn (d &ChangeData) get_more(name string) []string {
 	return get_more_field(d, name)
 }
 
-fn has_field[T](data &T, name string) bool {
+fn has_field[T](_data &T, name string) bool {
 	$for field in T.fields {
 		if field.name == name {
 			return true

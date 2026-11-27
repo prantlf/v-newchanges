@@ -1,4 +1,6 @@
+import arrays { map_indexed }
 import semver { Increment }
+import strconv { atoi }
 import time { now }
 import prantlf.semvut { next_prerelease, next_release }
 
@@ -101,6 +103,37 @@ fn compute_next_version(commits []Commit, last_version string, opts &Opts) !(str
 	d.log('the next version will be "%s"', next_version)
 	next_date := now().ymmdd()
 	return next_version, next_date
+}
+
+fn compute_next_product(last_product string) string {
+	if last_product == '' {
+		return ''
+	}
+
+	d.log_str('compute the next product number')
+	d.stop_ticking()
+
+	mut parts := last_product.split('.')
+	numbers := map_indexed(parts, fn (i int, part string) int {
+		return atoi(part) or { 0 }
+	})
+	if numbers.len == 1 {
+		parts[0] = (numbers[0] + 1).str()
+	} else if numbers.len == 2 {
+		if numbers[1] == 4 {
+			parts[0] = (numbers[0] + 1).str()
+			parts[1] = '1'
+		} else {
+			parts[1] = (numbers[1] + 1).str()
+		}
+	} else {
+		parts[2] = (numbers[2] + 1).str()
+	}
+	next_product := parts.join('.')
+
+	d.start_ticking()
+	d.log('the next product will be "%s"', next_product)
+	return next_product
 }
 
 fn get_version(tag string, opts &Opts) string {

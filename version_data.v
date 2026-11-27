@@ -1,4 +1,5 @@
 struct VersionData {
+	product      string
 	prev_version string
 	version      string
 	date         string

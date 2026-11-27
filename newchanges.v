@@ -59,6 +59,7 @@ struct Opts {
 	path             string
 	repo_url         string @[json: 'repo-url']
 	override_version string @[json: 'override-version']
+	override_product string @[json: 'override-product']
 	write_changes    string @[json: 'write-changes']
 	write_version    string @[json: 'write-version']
 	assume_patch     bool   @[json: 'assume-patch']
@@ -111,6 +112,7 @@ fn body(mut opts Opts, _args []string) ! {
 	mut last_change := -1
 	mut last_version := ''
 	mut last_date := ''
+	mut last_product := ''
 	changes_file_found := if opts.log != '' {
 		changes_file = opts.log
 		exists(opts.log)
@@ -131,7 +133,7 @@ fn body(mut opts Opts, _args []string) ! {
 	if opts.print_last {
 		if changes_file_found {
 			changes = get_changes(changes_file)!
-			first_line, last_line, last_ver := get_last_changes(changes, opts)!
+			first_line, last_line, last_ver, last_prod := get_last_changes(changes, opts)!
 			if first_line < 0 {
 				msg := 'no last changes found'
 				if !opts.failure {
@@ -152,7 +154,12 @@ fn body(mut opts Opts, _args []string) ! {
 				if opts.verbose {
 					println('\n')
 				}
-				println('version ${last_ver} and ${last_line - first_line} lines printed')
+				product := if last_prod != '' {
+					' (product ${last_prod})'
+				} else {
+					''
+				}
+				println('version ${last_ver}${product} and ${last_line - first_line} lines printed')
 			}
 			if opts.write_changes != '' {
 				write_file(opts.write_changes, contents)!
@@ -169,7 +176,8 @@ fn body(mut opts Opts, _args []string) ! {
 	if changes_file_found {
 		changes = get_changes(changes_file)!
 		mut heading := 0
-		last_change, heading, last_version, last_date = analyse_changes(changes, opts)!
+		last_change, heading, last_version, last_date, last_product =
+			analyse_changes(changes, opts)!
 		if heading > 0 && heading != opts.heading {
 			opts.heading = heading
 		}
@@ -220,7 +228,15 @@ fn body(mut opts Opts, _args []string) ! {
 		ver, date
 	}
 
-	new_changes := generate_changes(commits, last_version, next_version, next_date, opts)!
+	next_product := if opts.override_product != '' {
+		opts.override_product
+	} else {
+		product := compute_next_product(last_product)
+		product
+	}
+
+	new_changes :=
+		generate_changes(commits, last_version, next_version, next_date, next_product, opts)!
 	mut prefix := ''
 	mut suffix := ''
 	mut contents := ''
@@ -259,7 +275,12 @@ fn body(mut opts Opts, _args []string) ! {
 			''
 		}
 		println('${prefix}discovered ${commits.len} classified commit${commit_pl} from ${all_commit_count} total ${loc}')
-		println('version ${next_version} (${next_date}) and ${new_changes.len} lines ${suffix}')
+		product := if next_product != '' {
+			' (product ${next_product})'
+		} else {
+			''
+		}
+		println('version ${next_version} (${next_date})${product} and ${new_changes.len} lines ${suffix}')
 	}
 	if opts.write_changes != '' {
 		if contents == '' {

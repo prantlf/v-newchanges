@@ -14,7 +14,7 @@ fn test_one_tagged_fix() {
 			}
 		},
 	]
-	changes := generate_changes(commits, '1.0.0', '1.0.2', '2023-08-05', Opts{
+	changes := generate_changes(commits, '1.0.0', '1.0.2', '2023-08-05', '', Opts{
 		repo_url: 'https://github.com/test/test'
 	})!
 	assert changes == [
@@ -40,7 +40,7 @@ fn test_one_new_fix() {
 			}
 		},
 	]
-	changes := generate_changes(commits, '1.0.0', '1.0.1', '2023-08-05', Opts{
+	changes := generate_changes(commits, '1.0.0', '1.0.1', '2023-08-05', '', Opts{
 		repo_url: 'https://github.com/test/test'
 	})!
 	assert changes == [
@@ -75,7 +75,7 @@ fn test_two_new_fixes() {
 			}
 		},
 	]
-	changes := generate_changes(commits, '1.0.0', '1.0.1', '2023-08-05', Opts{
+	changes := generate_changes(commits, '1.0.0', '1.0.1', '2023-08-05', '', Opts{
 		repo_url: 'https://github.com/test/test'
 	})!
 	assert changes == [
@@ -112,7 +112,7 @@ fn test_two_versions() {
 			}
 		},
 	]
-	changes := generate_changes(commits, '1.0.0', '1.0.2', '2023-08-05', Opts{
+	changes := generate_changes(commits, '1.0.0', '1.0.2', '2023-08-05', '', Opts{
 		repo_url: 'https://github.com/test/test'
 	})!
 	assert changes == [
@@ -146,7 +146,7 @@ fn test_fix_with_breaking_change() {
 			}
 		},
 	]
-	changes := generate_changes(commits, '1.0.0', '1.0.1', '2023-08-05', Opts{
+	changes := generate_changes(commits, '1.0.0', '1.0.1', '2023-08-05', '', Opts{
 		repo_url: 'https://github.com/test/test'
 	})!
 	assert changes == [
@@ -191,7 +191,7 @@ You should upgrade to the current or still supported Node.js LTS version.']
 			}
 		},
 	]
-	changes := generate_changes(commits, '1.0.0', '1.0.1', '2023-08-05', Opts{
+	changes := generate_changes(commits, '1.0.0', '1.0.1', '2023-08-05', '', Opts{
 		repo_url: 'https://github.com/test/test'
 	})!
 	assert changes == [
@@ -212,6 +212,34 @@ You should upgrade to the current or still supported Node.js LTS version.']
 		'',
 		'* Dependencies (commander, at least) dropped support for Node.js 4. Node.js 6 should still work, but officially it is not supported either.
 You should upgrade to the current or still supported Node.js LTS version.',
+		'',
+	]
+}
+
+fn test_product() {
+	commits := [
+		Commit{
+			last: true
+			tags: ['v1.0.1']
+			vars: {
+				'type':        ['fix']
+				'short_hash':  ['b1535a3']
+				'hash':        ['b1535a3ec24be7913f0005cdd617680c02086cdf']
+				'date':        ['2023-03-05']
+				'description': ['Replace ajv@6 with ajv-draft-04']
+			}
+		},
+	]
+	changes := generate_changes(commits, '1.0.0', '1.0.2', '2023-08-05', '26.1.0', Opts{
+		version_tpl: '{heading} [{product} ({version})]({repo_url}/compare/{tag_prefix}{prev_version}...{tag_prefix}{version}) ({date})'
+		repo_url:    'https://github.com/test/test'
+	})!
+	assert changes == [
+		'## [26.1.0 (1.0.1)](https://github.com/test/test/compare/v1.0.0...v1.0.1) (2023-03-05)',
+		'',
+		'### Bug Fixes',
+		'',
+		'* Replace ajv@6 with ajv-draft-04 ([b1535a3](https://github.com/test/test/commit/b1535a3ec24be7913f0005cdd617680c02086cdf))',
 		'',
 	]
 }

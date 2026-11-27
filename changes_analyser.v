@@ -13,7 +13,7 @@ fn get_changes(changes_file string) ![]string {
 	return changes
 }
 
-fn analyse_changes(changes []string, opts &Opts) !(int, int, string, string) {
+fn analyse_changes(changes []string, opts &Opts) !(int, int, string, string, string) {
 	d.log_str('analyse previous changes')
 	d.stop_ticking()
 	mut re_version := onig_compile(opts.version_re, onig.opt_none)!
@@ -30,11 +30,13 @@ fn analyse_changes(changes []string, opts &Opts) !(int, int, string, string) {
 			} else {
 				0
 			}
+			last_product := m.group_text_by_name(line, 'product') or { '' }
 			last_version := m.group_text_by_name(line, 'version') or { '' }
 			date := m.group_text_by_name(line, 'date') or { '' }
 			d.start_ticking()
-			d.log('> version "%s" (%s) found (heading %d)', last_version, date, heading)
-			return i, heading, last_version, date
+			d.log('> version "%s" (%s) (product %s) found (heading %d)', last_version, date,
+				last_product, heading)
+			return i, heading, last_version, date, last_product
 		} else {
 			if err !is NoMatch {
 				return err
@@ -44,10 +46,10 @@ fn analyse_changes(changes []string, opts &Opts) !(int, int, string, string) {
 
 	d.start_ticking()
 	d.log_str('> no version found')
-	return -1, 0, '', ''
+	return -1, 0, '', '', ''
 }
 
-fn get_last_changes(changes []string, opts &Opts) !(int, int, string) {
+fn get_last_changes(changes []string, opts &Opts) !(int, int, string, string) {
 	d.log_str('get last changes')
 	d.stop_ticking()
 	mut re_version := onig_compile(opts.version_re, onig.opt_none)!
@@ -58,6 +60,7 @@ fn get_last_changes(changes []string, opts &Opts) !(int, int, string) {
 	mut first_line := -1
 	mut last_line := -1
 	mut last_version := ''
+	mut last_product := ''
 	for i in 0 .. changes.len {
 		line := changes[i]
 		d.log('%d: "%s"', i, line)
@@ -66,12 +69,14 @@ fn get_last_changes(changes []string, opts &Opts) !(int, int, string) {
 		}
 		if m := re_version.match_str(line, onig.opt_none) {
 			ver := m.group_text_by_name(line, 'version') or { '' }
-			d.log('> version "%s" found', ver)
+			prod_ver := m.group_text_by_name(line, 'product') or { '' }
+			d.log('> version "%s" (product %s) found', ver, prod_ver)
 			if first_line >= 0 {
 				break
 			} else {
 				first_line = i
 				last_version = ver
+				last_product = prod_ver
 			}
 		} else {
 			if err !is NoMatch {
@@ -84,10 +89,10 @@ fn get_last_changes(changes []string, opts &Opts) !(int, int, string) {
 	if first_line >= 0 {
 		d.start_ticking()
 		d.log_str('> last log from line ${first_line} to line ${last_line} inclusive')
-		return first_line, last_line + 1, last_version
+		return first_line, last_line + 1, last_version, last_product
 	}
 
 	d.start_ticking()
 	d.log_str('> no version found')
-	return -1, 0, ''
+	return -1, 0, '', ''
 }
